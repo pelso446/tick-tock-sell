@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Glyphicon } from 'react-bootstrap';
+
+
 import {
   Collapse,
   Navbar,
@@ -30,10 +34,7 @@ class Header extends Component {
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className='ml-auto' navbar />
-              <NavItem>
-                <span class='glyphicon glyphicon-plus' aria-hidden='true' />{' '}
-                Create Auction
-              </NavItem>
+                <Link to={`/CreateAuction`}>Create New Auction</Link>
             </Collapse>
           </Container>
         </Navbar>
