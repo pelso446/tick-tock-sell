@@ -1,0 +1,24 @@
+{
+  "name": "tick-tock-sell",
+  "version": "1.0.0",
+  "description": "App for auctioning out your stuff",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.ida.liu.se:erist333/tick-tock-sell.git"
+  },
+  "author": "Erik Ståhl",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
