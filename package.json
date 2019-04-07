@@ -16,7 +16,8 @@
   "author": "Erik Ståhl",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^4.1.0"
+    "concurrently": "^4.1.0",
+    "reactstrap": "^8.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
