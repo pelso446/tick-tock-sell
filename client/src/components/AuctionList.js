@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 class AuctionList extends Component {
   state = {
@@ -8,19 +9,23 @@ class AuctionList extends Component {
       { id: 2, name: 'Stånlis', items: 13, startingTime: '12:00' }
     ]
   };
+
+  handleClick = () => {
+    this.props.history.push('/Auction');
+  };
+
   render() {
     const { auctions } = this.state;
     return (
       <div>
-        <h2>Kommande auktioner ;)</h2>
-        {auctions.map(({ id, name, startingTime, items }) => (
-          <ListGroup>
-          <ListGroup.Item>Aktionsägare: {name}</ListGroup.Item>
-          <ListGroup.Item>Antal produkter: {items}</ListGroup.Item>
-          <ListGroup.Item>Starttid: {startingTime}</ListGroup.Item>
+        <h2>Kommande auktioner</h2>
+        <ListGroup>
+          {auctions.map(({ id, name, startingTime, items }) => (
+            <ListGroupItem action onClick={this.handleClick}>
+              {name} {items} {startingTime}
+            </ListGroupItem>
+          ))}
         </ListGroup>
-          
-        ))}
       </div>
     );
   }
