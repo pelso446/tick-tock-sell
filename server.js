@@ -3,7 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import config from 'config';
-import schema from './graphql/';
+import schema from './graphql/schemas';
 import expressGraphQL from 'express-graphql';
 
 const app = express();

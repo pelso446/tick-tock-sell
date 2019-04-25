@@ -1,8 +1,6 @@
-import mongoose from 'mongoose';
-
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Create the User Schema.
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -10,7 +8,8 @@ const UserSchema = new Schema({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   password: {
     type: String,
@@ -22,6 +21,5 @@ const UserSchema = new Schema({
   }
 });
 
-//Does this work?
-const User = mongoose.model('User', UserSchema);
-export default User;
+const UserModel = mongoose.model('users', UserSchema);
+module.exports = UserModel;
