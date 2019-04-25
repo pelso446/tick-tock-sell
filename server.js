@@ -1,10 +1,10 @@
-const express = require('express');
-//const graphqlHTTP = require('express-graphql');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const config = require('config');
-const schema = require('./schema');
-const expressGraphQL = require('express-graphql');
+import express from 'express';
+//import graphqlHTTP from'express-graphql';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import config from 'config';
+import schema from './graphql/';
+import expressGraphQL from 'express-graphql';
 
 const app = express();
 
