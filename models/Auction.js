@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const User = require('./User');
-const Item = require('./Item');
+//const Item = require('./Item');
 
 const AuctionSchema = new Schema({
   seller: {
@@ -14,14 +14,7 @@ const AuctionSchema = new Schema({
   },
   description: {
     type: String
-  },
-  /*   items: {
-    type: [Item]
-  },
-  number_of_items: {
-    type: Number,
-    default: items.length
-  }, */
+  } /* 
   items: {
     type: String,
     default: 'Saker'
@@ -29,8 +22,14 @@ const AuctionSchema = new Schema({
   number_of_items: {
     type: Number,
     default: 6
+  }, */,
+  /*   items: {
+    type: [Item]
   },
-  start_time: {
+  number_of_items: {
+    type: Number,
+    default: items.length
+  }, */ start_time: {
     type: Date,
     default: Date.now
   },
