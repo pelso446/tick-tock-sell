@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose, { Schema } from 'mongoose';
+const ObjectId = Schema.Types.ObjectId;
 
 const UserSchema = new Schema(
   {
@@ -18,7 +18,7 @@ const UserSchema = new Schema(
     },
     auctions: [
       {
-        type: Schema.Types.ObjectId,
+        type: ObjectId,
         ref: 'Auction'
       }
     ]
@@ -29,4 +29,4 @@ const UserSchema = new Schema(
 );
 
 const UserModel = mongoose.model('users', UserSchema);
-module.exports = UserModel;
+export default UserModel;
