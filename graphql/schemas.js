@@ -56,7 +56,7 @@ var auctionType = new GraphQLObjectType({
       number_of_items: {
         type: GraphQLInt
       }, */,
-      start_time: {
+      startTime: {
         type: GraphQLDate
       },
       created_at: {
@@ -222,7 +222,7 @@ var mutation = new GraphQLObjectType({
           number_of_items: {
             type: new GraphQLNonNull(GraphQLInt)
           }  ,
-          start_time: {
+          startTime: {
             type: new GraphQLNonNull(GraphQLDate)
           }  */
         },
@@ -257,7 +257,7 @@ var mutation = new GraphQLObjectType({
           number_of_items: {
             type: new GraphQLNonNull(GraphQLInt)
           }  ,
-          start_time: {
+          startTime: {
             type: new GraphQLNonNull(GraphQLDate)
           } */
         },
@@ -270,7 +270,7 @@ var mutation = new GraphQLObjectType({
               description: params.description,
               items: params.items,
               number_of_items: params.number_of_items,
-              start_time: params.start_time
+              startTime: params.startTime
             },
             function(err) {
               if (err) return next(err);

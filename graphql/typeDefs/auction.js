@@ -1,12 +1,16 @@
 import { gql } from 'apollo-server-express';
 
 export default gql`
+  extend type Query {
+    auction(id: ID!): Auction
+    auctions: [Auction!]!
+  }
   extend type Mutation {
     createAuction(
       sellerID: ID!
       title: String!
       description: String!
-      start_time: String!
+      startTime: String!
     ): Auction
   }
   type Auction {

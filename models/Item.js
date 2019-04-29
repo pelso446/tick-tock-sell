@@ -29,5 +29,5 @@ const ItemSchema = new Schema(
   { timestamps: true }
 );
 
-const ItemModel = mongoonse.model('items', ItemSchema);
+const ItemModel = mongoonse.model('Item', ItemSchema);
 export default ItemModel;

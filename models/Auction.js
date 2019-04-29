@@ -28,5 +28,5 @@ const AuctionSchema = new Schema(
   { timestamps: true }
 );
 
-const AuctionModel = mongoose.model('auctions', AuctionSchema);
+const AuctionModel = mongoose.model('Auction', AuctionSchema);
 export default AuctionModel;

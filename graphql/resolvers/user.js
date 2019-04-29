@@ -17,5 +17,10 @@ export default {
 
       return user;
     }
+  },
+  User: {
+    auctions: async (user, args, { req, res }, info) => {
+      return (await user.populate('auctions').execPopulate()).auctions;
+    }
   }
 };

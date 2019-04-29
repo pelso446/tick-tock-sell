@@ -1,4 +1,4 @@
 import user from './user';
 import auction from './auction';
 
-export default [user];
+export default [user, auction];
