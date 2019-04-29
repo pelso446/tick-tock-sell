@@ -19,7 +19,7 @@ export default {
     }
   },
   User: {
-    auctions: async (user, args, { req, res }, info) => {
+    auctions: async (user, args, context, info) => {
       return (await user.populate('auctions').execPopulate()).auctions;
     }
   }

@@ -14,7 +14,7 @@ export default gql`
     id: ID!
     email: String!
     name: String!
-    auctions: [Auction!]
+    auctions: [Auction!]!
     createdAt: String!
     updatedAt: String!
   }

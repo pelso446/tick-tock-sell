@@ -21,8 +21,8 @@ const AuctionSchema = new Schema(
       }
     ],
     startTime: {
-      type: Date,
-      default: Date.now
+      type: String,
+      required: true
     }
   },
   { timestamps: true }

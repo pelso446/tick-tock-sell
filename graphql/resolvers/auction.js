@@ -12,6 +12,7 @@ export default {
   Mutation: {
     createAuction: async (root, args, { req }, info) => {
       console.log(JSON.stringify(args));
+      const { sellerID, title, description, startTime } = args;
       const auction = await Auction.create({
         seller: sellerID,
         title,
