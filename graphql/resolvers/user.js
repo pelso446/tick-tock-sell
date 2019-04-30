@@ -1,4 +1,4 @@
-import { User } from '../../models';
+import { User, Auction } from '../../models';
 
 export default {
   Query: {
@@ -20,7 +20,7 @@ export default {
   },
   User: {
     auctions: async (user, args, context, info) => {
-      return (await user.populate('auctions').execPopulate()).auctions;
+      return Auction.find({ seller: user._id });
     }
   }
 };
