@@ -1,4 +1,4 @@
-import mongoonse, { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 const ObjectId = Schema.Types.ObjectId;
 
 const ItemSchema = new Schema(
@@ -13,8 +13,7 @@ const ItemSchema = new Schema(
       required: true
     },
     description: {
-      type: String,
-      required: true
+      type: String
     },
     price: {
       type: Number,
@@ -23,11 +22,12 @@ const ItemSchema = new Schema(
     },
     duration: {
       type: Number,
+      required: true,
       default: 30
     }
   },
   { timestamps: true }
 );
 
-const ItemModel = mongoonse.model('Item', ItemSchema);
+const ItemModel = mongoose.model('Item', ItemSchema);
 export default ItemModel;

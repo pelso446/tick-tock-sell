@@ -7,7 +7,10 @@ export default gql`
   }
   extend type Mutation {
     signUp(email: String!, name: String!, password: String!): User
+
+    #TODO: Add resolver and logic
     signIn(email: String!, password: String!): User
+    #TODO: Add resolver and logic
     signOut: Boolean
   }
   type User {

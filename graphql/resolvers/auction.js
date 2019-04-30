@@ -1,4 +1,4 @@
-import { Auction } from '../../models';
+import { Auction, Item } from '../../models';
 
 export default {
   Query: {
@@ -11,7 +11,6 @@ export default {
   },
   Mutation: {
     createAuction: async (root, args, { req }, info) => {
-      console.log(JSON.stringify(args));
       const { sellerID, title, description, startTime } = args;
       const auction = await Auction.create({
         seller: sellerID,
@@ -26,6 +25,9 @@ export default {
   Auction: {
     seller: async (auction, args, context, info) => {
       return (await auction.populate('seller').execPopulate()).seller;
+    },
+    items: async (auction, args, context, info) => {
+      return await Item.find({ auction: auction._id });
     }
   }
 };

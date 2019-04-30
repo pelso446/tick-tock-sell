@@ -5,8 +5,15 @@ const AuctionSchema = new Schema(
   {
     seller: {
       type: ObjectId,
-      ref: 'User'
+      ref: 'User',
+      required: true
     },
+    bidders: [
+      {
+        type: ObjectId,
+        ref: 'User'
+      }
+    ],
     title: {
       type: String,
       required: true
