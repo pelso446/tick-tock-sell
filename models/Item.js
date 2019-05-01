@@ -24,6 +24,10 @@ const ItemSchema = new Schema(
       type: Number,
       required: true,
       default: 30
+    },
+    highestBid: {
+      type: ObjectId,
+      ref: 'Bid'
     }
   },
   { timestamps: true }

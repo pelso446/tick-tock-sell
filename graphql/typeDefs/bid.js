@@ -14,9 +14,10 @@ export default gql`
   }
   type Bid {
     id: ID!
-    auction: Auction! #Necessary?
+    #auction: Auction! #Necessary?
     item: Item!
     bidder: User!
+    amount: Int!
     createdAt: String!
     updatedAt: String!
   }

@@ -3,9 +3,9 @@ const ObjectId = Schema.Types.ObjectId;
 
 const BidSchema = new Schema(
   {
-    auction: {
+    item: {
       type: ObjectId,
-      ref: 'Auction',
+      ref: 'Item',
       required: true
     },
     bidder: {

@@ -1,21 +1,20 @@
-import { Item, Auction } from '../../models';
+import { Item, Auction, Bid } from '../../models';
 
 export default {
   Query: {
     items: async (root, args, { req }, info) => {
-      console.log(JSON.stringify(args));
+      //console.log(JSON.stringify(args));
       if (args.auctionID) {
-        console.log('if');
-        //Might not yet be working, try with auction populated with items
-        return await Item.findById({ auction: args.auctionID });
+        //console.log('if');
+        return await Item.find({ auction: args.auctionID });
       } else {
-        console.log('else');
+        //console.log('else');
         return await Item.find();
       }
     },
     item: async (root, args, context, info) => {
-      console.log(JSON.stringify(args));
-      return Auction.findById(args.itemID);
+      //console.log(JSON.stringify(args));
+      return Item.findById(args.itemID);
     }
   },
   Mutation: {
@@ -34,8 +33,12 @@ export default {
   },
   Item: {
     auction: async (item, args, context, info) => {
-      console.log(JSON.stringify(item));
+      //console.log(JSON.stringify(item));
       return await Auction.findById(item.auction);
+    },
+    highestBid: async (item, args, context, info) => {
+      //console.log(JSON.stringify(item));
+      return await Bid.findById(item.highestBid);
     }
   }
 };
