@@ -3,9 +3,13 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import config from 'config';
-import schema from './graphql/schemas';
-import expressGraphQL from 'express-graphql';
+//import schema from './graphql/schemas';
+import typeDefs from './graphql/typeDefs';
+import resolvers from './graphql/resolvers';
+//import expressGraphQL from 'express-graphql';
+import { ApolloServer } from 'apollo-server-express';
 
+const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
 
 // Allow cross-origin
@@ -21,20 +25,29 @@ const db = config.get('mongoURI');
 mongoose
   .connect(db, {
     useNewUrlParser: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify: false
   })
   .then(() => console.log('MongoDB Connected... '))
   .catch(err => console.log(err));
 
-app.use(
+/* app.use(
   '/graphql',
   expressGraphQL({
     schema,
     graphiql: true
   })
-);
+); */
 
-if (process.env.NODE_ENV === 'production') {
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  playground: !IN_PROD
+});
+
+server.applyMiddleware({ app, cors: false });
+
+if (IN_PROD) {
   app.use(express.static('public'));
 
   app.get('*', (req, res) => {
@@ -43,4 +56,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Server started on http://localhost:${PORT}${server.graphqlPath}`)
+);
