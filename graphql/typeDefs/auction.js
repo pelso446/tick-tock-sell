@@ -9,7 +9,7 @@ export default gql`
     createAuction(
       sellerID: ID!
       title: String!
-      description: String!
+      description: String
       startTime: String!
     ): Auction
     #TODO: Create resolver

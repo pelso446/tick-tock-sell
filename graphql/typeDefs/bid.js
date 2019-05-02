@@ -5,7 +5,7 @@ export default gql`
     #TODO: add resolver
     bid(id: ID!): Bid
     #TODO: add resolver
-    bids(itemID: ID, auctionID: ID): Bid
+    bids(itemID: ID, bidderID: ID): [Bid!]!
   }
 
   extend type Mutation {

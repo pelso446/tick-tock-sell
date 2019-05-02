@@ -4,16 +4,16 @@ export default {
   Query: {
     bids: async (root, args, { req }, info) => {
       //console.log(JSON.stringify(args));
-      const { auctionID, bidderID } = args;
-      if (auctionID && bidderID) {
+      const { itemID, bidderID } = args;
+      if (itemID && bidderID) {
         //console.log('if & if');
-        return await Bid.find({ auction: auctionID, item: itemID });
-      } else if (auctionID && !bidderID) {
+        return await Bid.find({ item: itemID, bidder: bidderID });
+      } else if (itemID && !bidderID) {
         //console.log('if & not');
-        return await Bid.find({ auction: auctionID });
-      } else if (!auctionID && bidderID) {
-        //console.log('not & if');
         return await Bid.find({ item: itemID });
+      } else if (!itemID && bidderID) {
+        //console.log('not & if');
+        return await Bid.find({ bidder: bidderID });
       } else {
         //console.log('not & not');
         return await Bid.find();
@@ -21,13 +21,15 @@ export default {
     },
     bid: async (root, args, context, info) => {
       //console.log(JSON.stringify(args));
-      return Item.findById(args);
+      return Bid.findById(args.id);
     }
   },
   Mutation: {
     putBid: async (root, args, { req }, info) => {
       const { itemID, bidderID, amount } = args;
-      const item = Item.findById(itemID);
+      const item = await Item.findById(itemID).then(value => {
+        console.log(value);
+      });
       const highestBid = Bid.findById(item.highestBid);
 
       // TODO: Add error handling
