@@ -1,4 +1,5 @@
 import { Item, User, Bid } from '../../models';
+import { ApolloError, UserInputError } from 'apollo-server-express';
 
 export default {
   Query: {
@@ -20,46 +21,40 @@ export default {
       }
     },
     bid: async (root, args, context, info) => {
-      //console.log(JSON.stringify(args));
       return Bid.findById(args.id);
     }
   },
   Mutation: {
     putBid: async (root, args, { req }, info) => {
       const { itemID, bidderID, amount } = args;
-      const item = await Item.findById(itemID).then(value => {
-        console.log(value);
-      });
-      const highestBid = Bid.findById(item.highestBid);
+      let highestBid = null;
+      const item = await Item.findById(itemID);
+      if (item.highestBid) {
+        highestBid = await Bid.findById(item.highestBid);
+      }
 
-      // TODO: Add error handling
-      //console.log(item);
-
+      const validationErrors = {};
       if (!item) {
-        console.log('Item missing');
-        return null;
+        validationErrors.item = 'Item not found';
       }
-      if (highestBid.amount > amount) {
-        console.log('Higher bid exists');
-        return null;
+      if (highestBid.amount >= amount) {
+        validationErrors.amount = 'Higher bid already exists';
       }
+      if (Object.keys(validationErrors).length > 0) {
+        throw new UserInputError(
+          'Failed to get events due to validation errors',
+          { validationErrors }
+        );
+      }
+
       const bid = await Bid.create({
         item: itemID,
         bidder: bidderID,
         amount
       });
-      //item.highestbid = amount;
-      console.log(JSON.stringify(bid));
 
-      try {
-        Item.updateOne(
-          itemID,
-          { $set: { highestBid: bid._id } },
-          { new: true }
-        );
-      } catch (e) {
-        console.log('New bid on item' + e);
-      }
+      item.highestBid = bid._id;
+      await item.save();
 
       return bid;
     }
