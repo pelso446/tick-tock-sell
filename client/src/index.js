@@ -11,19 +11,22 @@ import CreateAuction from './components/CreateAuction';
 import Auction from './components/Auction';
 import EditAuction from './components/EditAuction';
 
-const client = new ApolloClient();
+const client = new ApolloClient({
+  uri: '/graphql'
+});
+
 ReactDOM.render(
-    <ApolloProvider client={client}>
-        <Router>
-            <div>
-                <Route exact path='/' component={App} />
-                <Route path='/create' component={CreateAuction} />
-                <Route path='/edit/:id' component={EditAuction} />
-                <Route path='/show/:id' component={Auction} />
-            </div>
-        </Router>
-    </ApolloProvider>, 
-    document.getElementById('root')
+  <ApolloProvider client={client}>
+    <Router>
+      <div>
+        <Route exact path='/' component={App} />
+        <Route path='/create' component={CreateAuction} />
+        <Route path='/edit/:id' component={EditAuction} />
+        <Route path='/show/:id' component={Auction} />
+      </div>
+    </Router>
+  </ApolloProvider>,
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

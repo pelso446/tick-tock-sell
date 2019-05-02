@@ -26,7 +26,7 @@
     "express-graphql": "^0.7.1",
     "graphql": "^14.2.1",
     "graphql-date": "^1.0.3",
-    "graphql-tools": "^4.0.4",
+    "graphql-tools": "^4.0.4",  
     "merge-graphql-schemas": "^1.5.8",
     "mongoose": "^5.5.0"
   },
