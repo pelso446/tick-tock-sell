@@ -49,14 +49,14 @@ var auctionType = new GraphQLObjectType({
       },
       description: {
         type: GraphQLString
-      },
+      } /* 
       items: {
         type: GraphQLString
       },
       number_of_items: {
         type: GraphQLInt
-      },
-      start_time: {
+      }, */,
+      startTime: {
         type: GraphQLDate
       },
       created_at: {
@@ -207,25 +207,24 @@ var mutation = new GraphQLObjectType({
       addAuction: {
         type: auctionType,
         args: {
-          /* 
           seller: {
-            type: new GraphQLNonNull(userType)
-          }, */
+            type: new GraphQLNonNull(GraphQLString)
+          },
           title: {
             type: new GraphQLNonNull(GraphQLString)
           },
           description: {
             type: new GraphQLNonNull(GraphQLString)
-          },
+          } /* ,
           items: {
             type: new GraphQLNonNull(GraphQLString)
           },
           number_of_items: {
             type: new GraphQLNonNull(GraphQLInt)
-          } /* ,
-          start_time: {
+          }  ,
+          startTime: {
             type: new GraphQLNonNull(GraphQLDate)
-          } */
+          }  */
         },
         resolve: function(root, params) {
           const auctionModel = new AuctionModel(params);
@@ -242,23 +241,23 @@ var mutation = new GraphQLObjectType({
           id: {
             name: 'id',
             type: new GraphQLNonNull(GraphQLString)
-          } /* 
+          },
           seller: {
-            type: new GraphQLNonNull(userType)
-          }, */,
+            type: new GraphQLObjectType(userType)
+          },
           title: {
             type: new GraphQLNonNull(GraphQLString)
           },
           description: {
             type: new GraphQLNonNull(GraphQLString)
-          },
+          } /*,
           items: {
             type: new GraphQLNonNull(GraphQLString)
           },
           number_of_items: {
             type: new GraphQLNonNull(GraphQLInt)
-          } /* ,
-          start_time: {
+          }  ,
+          startTime: {
             type: new GraphQLNonNull(GraphQLDate)
           } */
         },
@@ -271,7 +270,7 @@ var mutation = new GraphQLObjectType({
               description: params.description,
               items: params.items,
               number_of_items: params.number_of_items,
-              start_time: params.start_time
+              startTime: params.startTime
             },
             function(err) {
               if (err) return next(err);
