@@ -9,10 +9,9 @@ export default gql`
     createAuction(
       sellerID: ID!
       title: String!
-      description: String!
+      description: String
       startTime: String!
     ): Auction
-    #TODO: Create resolver
     joinAuction(auctionID: ID!, bidderID: ID!): Auction
     #TODO: Create resolver
     leaveAuction(auctionID: ID!, bidderID: ID!): Auction
@@ -20,6 +19,7 @@ export default gql`
   type Auction {
     id: ID!
     seller: User!
+    bidders: [User!]!
     title: String!
     description: String!
     items: [Item!]!
