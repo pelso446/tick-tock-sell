@@ -27,7 +27,8 @@ const ItemSchema = new Schema(
     },
     highestBid: {
       type: ObjectId,
-      ref: 'Bid'
+      ref: 'Bid',
+      default: null
     }
   },
   { timestamps: true }
