@@ -4,39 +4,31 @@ import { Mutation } from 'react-apollo';
 import { Link } from 'react-router-dom';
 
 const ADD_AUCTION = gql`
-  mutation AddAuction(
-    $seller: String!
+  mutation createAuction(
+    $sellerID: ID!
     $title: String!
     $description: String!
-    $start_time: Date!
-    $items: String!
-    $number_of_items: Number!
-    $created_at: Date!
-
+    $startTime: String!
   ) {
-    addAuction(
-      seller: $seller
+    createAuction(
+      sellerID: $sellerID
       title: $title
       description: $description
-      start_time: $start_time
-      items: $items
-      number_of_items: $number_of_items
-      created_at: $created_at
+      startTime: $startTime
     ) {
-      _id
+      id
     }
   }
 `;
-
 class Create extends Component {
   render() {
-    let seller, title, description, items, start_time;
+    let title, description, startTime;
     return (
       <Mutation
         mutation={ADD_AUCTION}
         onCompleted={() => this.props.history.push('/')}
       >
-        {(addAuction, { loading, error }) => (
+        {(createAuction, { loading, error } ) => (
           <div className='container'>
             <div className='panel panel-default'>
               <div className='panel-heading'>
@@ -51,34 +43,21 @@ class Create extends Component {
                 <form
                   onSubmit={e => {
                     e.preventDefault();
-                    addAuction({
-                      variables: {
-                        seller: seller.value,
-                        title: title.value,
-                        description: description.value,
-                        //start_time: start_time.value,
-                        items: parseInt(items.value)
-                      }
-                    });
-                    seller.value = '';
+                    createAuction(
+                      {
+                        variables: {
+                          sellerID: '5ccabaf90ae5a1153a0f5e14',
+                          title: title.value,
+                          description: description.value,
+                          startTime: startTime.value
+                        }
+                      }                    
+                    );
                     title.value = '';
                     description.value = '';
-                 //   start_time.value = null;
-                    items.value = '';
+                    startTime.value = '';
                   }}
                 >
-                  <div className='form-group'>
-                    <label htmlFor='seller'>Seller:</label>
-                    <input
-                      type='text'
-                      className='form-control'
-                      name='seller'
-                      ref={node => {
-                        seller = node;
-                      }}
-                      placeholder='Seller'
-                    />
-                  </div>
                   <div className='form-group'>
                     <label htmlFor='title'>Title:</label>
                     <input
@@ -104,31 +83,19 @@ class Create extends Component {
                       rows='3'
                     />
                   </div>
-                  <h7 className='panel-title'>ADD Items :)</h7>
                   <div className='form-group'>
-                    <label htmlFor='item'>Item:</label>
+                    <label htmlFor='start_time'>Start TIME</label>
                     <input
                       type='text'
                       className='form-control'
-                      name='items'
+                      name='start_time'
                       ref={node => {
-                        items = node;
+                        startTime = node;
                       }}
-                      placeholder='Item title'
-                    />
-                    </div>
-                    <div className='form-group'>
-                    <label htmlFor='item'>Item:</label>
-                    <input
-                      type='number'
-                      className='form-control'
-                      name='number_of_items'
-                      ref={node => {
-                        items = node;
-                      }}
-                      placeholder='Number of items'
+                      placeholder='Start time'
                     />
                   </div>
+                 
                   <button type='submit' className='btn btn-success'>
                     Submit
                   </button>

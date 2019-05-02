@@ -14,8 +14,8 @@ import { Query } from 'react-apollo';
 const GET_AUCTIONS = gql`
   {
     auctions {
-      _id
       title
+      
     }
   }
 `;
