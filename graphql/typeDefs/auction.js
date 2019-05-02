@@ -12,7 +12,6 @@ export default gql`
       description: String
       startTime: String!
     ): Auction
-    #TODO: Create resolver
     joinAuction(auctionID: ID!, bidderID: ID!): Auction
     #TODO: Create resolver
     leaveAuction(auctionID: ID!, bidderID: ID!): Auction
