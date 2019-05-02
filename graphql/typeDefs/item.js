@@ -2,9 +2,7 @@ import { gql } from 'apollo-server-express';
 
 export default gql`
   extend type Query {
-    #Seems to work
     item(itemID: ID!): Item!
-    #Seems to work
     items(auctionID: ID): [Item!]!
   }
 

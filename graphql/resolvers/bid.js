@@ -1,5 +1,5 @@
 import { Item, User, Bid } from '../../models';
-import { ApolloError, UserInputError } from 'apollo-server-express';
+import { UserInputError } from 'apollo-server-express';
 
 export default {
   Query: {

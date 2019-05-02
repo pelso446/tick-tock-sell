@@ -20,6 +20,7 @@ export default gql`
   type Auction {
     id: ID!
     seller: User!
+    bidders: [User!]!
     title: String!
     description: String!
     items: [Item!]!
