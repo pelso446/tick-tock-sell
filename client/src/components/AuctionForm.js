@@ -22,6 +22,48 @@ const ADD_AUCTION = gql`
 `;
 
 class Create extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            items: [{title: "", price: ""}]
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+      }
+      
+      addClick(){
+        this.setState(prevState => ({ 
+            items: [...prevState.items, { title: "", price: "" }]
+        }))
+      }
+      
+      createUI(){
+         return this.state.items.map((el, i) => (
+           <div key={i}>
+              <input placeholder="Title" name="title" value={el.title ||''} onChange={this.handleChange.bind(this, i)} />
+              <input placeholder="Price" name="price" value={el.price ||''} onChange={this.handleChange.bind(this, i)} />
+              <input type='button' value='remove' onClick={this.removeClick.bind(this, i)}/>
+           </div>          
+         ))
+      }
+      
+      handleChange(i, e) {
+         const { title, value } = e.target;
+         let items = [...this.state.items];
+         items[i] = {...items[i], [title]: value};
+         this.setState({ items });
+      }
+      
+      removeClick(i){
+         let items = [...this.state.items];
+         items.splice(i, 1);
+         this.setState({ items });
+      }
+      
+      handleSubmit(event) {
+        alert('A name was submitted: ' + JSON.stringify(this.state.items));
+        event.preventDefault();
+      }
+
   render() {
     let title, description, startTime;
     return (
@@ -94,7 +136,8 @@ class Create extends Component {
                       placeholder='Start time'
                     />
                   </div>
-
+                  {this.createUI()}        
+                 <input type='button' value='add more' onClick={this.addClick.bind(this)}/>
                   <button type='submit' className='btn btn-success'>
                     Submit
                   </button>
