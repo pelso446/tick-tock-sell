@@ -12,13 +12,26 @@ export default {
   },
   Mutation: {
     createAuction: async (root, args, { req }, info) => {
-      const { sellerID, title, description, startTime } = args;
+      const { sellerID, title, description, startTime, items } = args;
+
       const auction = await Auction.create({
         seller: sellerID,
         title,
         description,
         startTime
       });
+
+      if (items) {
+        items.map(async item => {
+          await Item.create({
+            auction: auction._id,
+            title: item.itemTitle,
+            description: item.itemDescription,
+            price: item.itemPrice,
+            duration: item.itemDuration
+          });
+        });
+      }
 
       return auction;
     },
@@ -31,35 +44,6 @@ export default {
         }
       }).populate('seller');
 
-      if (auction.seller._id == bidderID) {
-        validationErrors.badInput =
-          'An auction owner can not join their own auction';
-      }
-
-      if (Object.keys(validationErrors).length > 0) {
-        throw new AuthenticationError(
-          'Failed to get events due to validation errors',
-          { validationErrors }
-        );
-      }
-
-      await Auction.findOne({ '_id': auctionID }, async function(err, auction) {
-        auction.bidders.push(bidderID);
-        await auction.save();
-      });
-
-      return auction;
-    },
-    leaveAuction: async (root, args, { req }, info) => {
-      const validationErrors = {};
-      const { auctionID, bidderID } = args;
-      const auction = await Auction.findById(auctionID, function(err, docs) {
-        if (err) {
-          ValidationError.err = err;
-        }
-      }).populate('seller');
-
-      //Remove??
       if (auction.seller._id == bidderID) {
         validationErrors.badInput =
           'An auction owner can not join their own auction';
