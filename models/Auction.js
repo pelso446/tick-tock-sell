@@ -21,12 +21,6 @@ const AuctionSchema = new Schema(
     description: {
       type: String
     },
-    items: [
-      {
-        type: ObjectId,
-        ref: 'Item'
-      }
-    ],
     startTime: {
       type: String,
       required: true

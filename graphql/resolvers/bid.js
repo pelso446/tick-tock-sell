@@ -26,20 +26,31 @@ export default {
   },
   Mutation: {
     putBid: async (root, args, { req }, info) => {
-      const { itemID, bidderID, amount } = args;
-      let highestBid = null;
-      const item = await Item.findById(itemID);
-      if (item.highestBid) {
-        highestBid = await Bid.findById(item.highestBid);
-      }
-
       const validationErrors = {};
+      const { itemID, bidderID, amount } = args;
+      //let highestBid = null;
+      const item = await Item.findById(itemID, function(err, docs) {
+        if (err) {
+          validationErrors.itemError = err;
+        }
+      }).populate('auction highestBid');
+
       if (!item) {
         validationErrors.item = 'Item not found';
+      } else {
+        if (item.auction) {
+          if (item.auction.seller == bidderID) {
+            validationErrors.badBidder =
+              'This user is not allowed to bid on the item';
+          }
+          if (item.highestBid) {
+            if (item.highestBid.amount >= amount) {
+              validationErrors.amount = 'Higher bid already exists';
+            }
+          }
+        }
       }
-      if (highestBid.amount >= amount) {
-        validationErrors.amount = 'Higher bid already exists';
-      }
+
       if (Object.keys(validationErrors).length > 0) {
         throw new UserInputError(
           'Failed to get events due to validation errors',
@@ -60,9 +71,11 @@ export default {
     }
   },
   Bid: {
+    //Use populate
     item: async (bid, args, context, info) => {
       return await Item.findById(bid.item);
     },
+    //Use populate
     bidder: async (bid, args, context, info) => {
       return await User.findById(bid.bidder);
     }

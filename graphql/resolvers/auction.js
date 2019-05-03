@@ -49,6 +49,35 @@ export default {
       });
 
       return auction;
+    },
+    leaveAuction: async (root, args, { req }, info) => {
+      const validationErrors = {};
+      const { auctionID, bidderID } = args;
+      const auction = await Auction.findById(auctionID, function(err, docs) {
+        if (err) {
+          ValidationError.err = err;
+        }
+      }).populate('seller');
+
+      //Remove??
+      if (auction.seller._id == bidderID) {
+        validationErrors.badInput =
+          'An auction owner can not join their own auction';
+      }
+
+      if (Object.keys(validationErrors).length > 0) {
+        throw new AuthenticationError(
+          'Failed to get events due to validation errors',
+          { validationErrors }
+        );
+      }
+
+      await Auction.findOne({ '_id': auctionID }, async function(err, auction) {
+        auction.bidders.push(bidderID);
+        await auction.save();
+      });
+
+      return auction;
     }
   },
   Auction: {

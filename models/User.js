@@ -15,13 +15,7 @@ const UserSchema = new Schema(
     password: {
       type: String,
       require: true
-    },
-    auctions: [
-      {
-        type: ObjectId,
-        ref: 'Auction'
-      }
-    ]
+    }
   },
   {
     timestamps: true
