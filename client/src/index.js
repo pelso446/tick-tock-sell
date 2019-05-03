@@ -7,7 +7,7 @@ import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import CreateAuction from './components/CreateAuction';
+import AuctionForm from './components/AuctionForm';
 import Auction from './components/Auction';
 import EditAuction from './components/EditAuction';
 
@@ -20,7 +20,7 @@ ReactDOM.render(
     <Router>
       <div>
         <Route exact path='/' component={App} />
-        <Route path='/create' component={CreateAuction} />
+        <Route path='/auctionform' component={AuctionForm} />
         <Route path='/edit/:id' component={EditAuction} />
         <Route path='/show/:id' component={Auction} />
       </div>

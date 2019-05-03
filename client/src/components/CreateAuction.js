@@ -21,94 +21,113 @@ const ADD_AUCTION = gql`
   }
 `;
 class Create extends Component {
-  render() {
-    let title, description, startTime;
-    return (
-      <Mutation
-        mutation={ADD_AUCTION}
-        onCompleted={() => this.props.history.push('/')}
-      >
-        {(createAuction, { loading, error } ) => (
-          <div className='container'>
-            <div className='panel panel-default'>
-              <div className='panel-heading'>
-                <h3 className='panel-title'>ADD AUCTION</h3>
+    constructor() {
+        super();
+        this.state = {
+          title: null,
+          description: null,
+          startTime: null
+        };
+        
+        this.publish = this.publish.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+      }
+      
+      handleChange({ target }) {
+        this.setState({
+          [target.name]: target.value
+        });
+      }
+    
+      publish() {
+        console.log( this.state.title, this.state.description, this.state.startTime );
+      }
+      
+      render() {
+        return (
+          <Loader loading={this.state.isLoading}>
+            <h1 className="title has-text-white">
+              {this.state.edit ? 'Redigera hem' : 'Lägg till hem'}
+            </h1>
+            <p className="subtitle has-text-white">Vänligen fyll i formuläret nedan</p>
+            <Form onSubmit={e => this.handleSubmit(e)}>
+              <TextField
+                label="Namn"
+                name="name"
+                placeholder="Namn"
+                type="text"
+                value={this.state.name}
+                error={this.state.nameError}
+                handleChange={this.handleChange}
+              />
+              <div className="field">
+                <label className="label">Län</label>
+                <div className="control">
+                  <div className="select">
+                    <select name="county" value={this.state.county} onChange={this.handleChange}>
+                      <option>Välj län</option>
+                      {this.state.counties.map(({ id, name }) => (
+                        <option key={id} value={id}>{name}</option>
+                      ))}
+                    </select>
+                  </div>              
+                </div>
+                {this.renderCountyError()}
               </div>
-              <div className='panel-body'>
-                <h4>
-                  <Link to='/' className='btn btn-primary'>
-                    Auction List
-                  </Link>
-                </h4>
-                <form
-                  onSubmit={e => {
-                    e.preventDefault();
-                    createAuction(
-                      {
-                        variables: {
-                          sellerID: '5ccabaf90ae5a1153a0f5e14',
-                          title: title.value,
-                          description: description.value,
-                          startTime: startTime.value
-                        }
-                      }                    
-                    );
-                    title.value = '';
-                    description.value = '';
-                    startTime.value = '';
-                  }}
+              <TextField
+                label="Pris per dygn"
+                name="price"
+                placeholder="Pris per dygn"
+                type="text"
+                value={this.state.price}
+                error={this.state.priceError}
+                handleChange={this.handleChange}
+              />
+              <TextField
+                label="Antal platser"
+                name="capacity"
+                placeholder="Antal platser"
+                type="text"
+                error={this.state.capacityError}
+                value={this.state.capacity}
+                handleChange={this.handleChange}
+              />
+              <div className="field">
+                <label className="label">Beskrivning</label>
+                <div className="control">
+                  <textarea
+                    className="textarea"
+                    type="text"
+                    name="description"
+                    placeholder="Beskrivning"
+                    value={this.state.description}
+                    onChange={e => this.handleChange(e)}
+                  />
+                </div>
+              </div>
+              <div className="field">
+                <Button
+                  primary
+                  type="submit"
                 >
-                  <div className='form-group'>
-                    <label htmlFor='title'>Title:</label>
-                    <input
-                      type='text'
-                      className='form-control'
-                      name='title'
-                      ref={node => {
-                        title = node;
-                      }}
-                      placeholder='Title'
-                    />
-                  </div>
-                  <div className='form-group'>
-                    <label htmlFor='description'>Description:</label>
-                    <textarea
-                      className='form-control'
-                      name='description'
-                      ref={node => {
-                        description = node;
-                      }}
-                      placeholder='Description'
-                      cols='80'
-                      rows='3'
-                    />
-                  </div>
-                  <div className='form-group'>
-                    <label htmlFor='start_time'>Start TIME</label>
-                    <input
-                      type='text'
-                      className='form-control'
-                      name='start_time'
-                      ref={node => {
-                        startTime = node;
-                      }}
-                      placeholder='Start time'
-                    />
-                  </div>
-                 
-                  <button type='submit' className='btn btn-success'>
-                    Submit
-                  </button>
-                </form>
-                {loading && <p>Loading...</p>}
-                {error && <p>Error :( Please try again</p>}
+                  Nästa steg
+                </Button>
               </div>
-            </div>
-          </div>
-        )}
-      </Mutation>
-    );
-  }
-}
-
-export default Create;
+              <FormMessage visible={this.state.error} children={this.state.errorMessage} />
+            </Form>
+          </Loader>
+        );
+      }
+     
+      renderCountyError() {
+        if (this.state.countyError) {
+          return (
+            <p className="help is-danger">Välj län</p>
+          );
+        }
+      }
+     
+    }
+     
+     
+    export default Create;
