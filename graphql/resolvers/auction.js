@@ -12,13 +12,26 @@ export default {
   },
   Mutation: {
     createAuction: async (root, args, { req }, info) => {
-      const { sellerID, title, description, startTime } = args;
+      const { sellerID, title, description, startTime, items } = args;
+
       const auction = await Auction.create({
         seller: sellerID,
         title,
         description,
         startTime
       });
+
+      if (items) {
+        items.map(async item => {
+          await Item.create({
+            auction: auction._id,
+            title: item.itemTitle,
+            description: item.itemDescription,
+            price: item.itemPrice,
+            duration: item.itemDuration
+          });
+        });
+      }
 
       return auction;
     },

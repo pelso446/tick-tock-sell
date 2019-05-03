@@ -11,6 +11,7 @@ export default gql`
       title: String!
       description: String
       startTime: String!
+      items: [itemInput]
     ): Auction
     joinAuction(auctionID: ID!, bidderID: ID!): Auction
     #TODO: Create resolver
@@ -26,5 +27,12 @@ export default gql`
     startTime: String!
     createdAt: String!
     updatedAt: String!
+  }
+
+  input itemInput {
+    itemTitle: String!
+    itemDescription: String
+    itemPrice: Int
+    itemDuration: Int
   }
 `;
