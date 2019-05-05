@@ -14,8 +14,8 @@ export default gql`
       items: [itemInput]
     ): Auction
     joinAuction(auctionID: ID!, bidderID: ID!): Auction
-    #TODO: Create resolver
     leaveAuction(auctionID: ID!, removeBidderID: ID!): Auction
+    deleteAuction(auctionID: ID!): Auction
   }
   type Auction {
     id: ID!

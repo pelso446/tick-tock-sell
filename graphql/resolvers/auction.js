@@ -13,6 +13,19 @@ export default {
   Mutation: {
     createAuction: async (root, args, { req }, info) => {
       const { sellerID, title, description, startTime, items } = args;
+      const validationErrors = {};
+      User.findById(sellerID, function(err, res) {
+        if (err) {
+          validationErrors.err = err;
+        }
+      });
+
+      if (Object.keys(validationErrors).length > 0) {
+        throw new AuthenticationError(
+          'Failed to get events due to validation errors',
+          { validationErrors }
+        );
+      }
 
       const auction = await Auction.create({
         seller: sellerID,
@@ -82,6 +95,22 @@ export default {
       await auction.save();
 
       return auction;
+    },
+    deleteAuction: async (root, args, { req }, info) => {
+      const validationErrors = {};
+      const { auctionID } = args;
+      Auction.findByIdAndRemove(auctionID, function(err, res) {
+        if (err) {
+          validationErrors.removeError = 'err';
+          throw new AuthenticationError(
+            'Failed to get events due to validation errors',
+            { validationErrors }
+          );
+        } else {
+          console.log(res);
+          return res;
+        }
+      });
     }
   },
   Auction: {
