@@ -40,14 +40,15 @@ export default {
       const { auctionID, bidderID } = args;
       const auction = await Auction.findById(auctionID, function(err, docs) {
         if (err) {
-          ValidationError.err = err;
+          validationErrors.err = err;
         }
-      }).populate('seller');
+      });
 
-      if (auction.seller._id == bidderID) {
-        validationErrors.badInput =
-          'An auction owner can not join their own auction';
-      }
+      auction.bidders.forEach(element => {
+        if (element.toString() === bidderID) {
+          validationErrors.bidders = 'Bidder is already part of auction';
+        }
+      });
 
       if (Object.keys(validationErrors).length > 0) {
         throw new AuthenticationError(
@@ -56,10 +57,29 @@ export default {
         );
       }
 
-      await Auction.findOne({ '_id': auctionID }, async function(err, auction) {
-        auction.bidders.push(bidderID);
-        await auction.save();
+      auction.bidders.push(bidderID);
+      await auction.save();
+
+      return auction;
+    },
+    leaveAuction: async (root, args, { req }, info) => {
+      const validationErrors = {};
+      const { auctionID, removeBidderID } = args;
+      const auction = await Auction.findById(auctionID, function(err, docs) {
+        if (err) {
+          ValidationError.err = err;
+        }
       });
+
+      if (Object.keys(validationErrors).length > 0) {
+        throw new AuthenticationError(
+          'Failed to get events due to validation errors',
+          { validationErrors }
+        );
+      }
+
+      auction.bidders.pull(removeBidderID);
+      await auction.save();
 
       return auction;
     }
