@@ -99,7 +99,7 @@ class Register extends Component {
   _confirm = async data => {
     console.log(data);
 
-    const { token } = data.login;
+    const { token } = data.signUp.token;
     this._saveUserData(token);
     this.props.history.push(`/`);
   };
