@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { AUTH_TOKEN } from '../constants';
 import { Button } from 'reactstrap';
+import { withRouter } from 'react-router';
 
 import {
   Collapse,
@@ -53,7 +54,7 @@ class Header extends Component {
                     this.props.history.push('/');
                   }}
                 >
-                  Test
+                  Logga ut
                 </Button>
               ) : (
                 <React.Fragment>
@@ -73,4 +74,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default withRouter(Header);
