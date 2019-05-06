@@ -15,9 +15,12 @@ import {
 } from 'reactstrap';
 
 class Header extends Component {
-  state = {
-    isOpen: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+  }
 
   toggle = () => {
     this.setState({
@@ -25,10 +28,12 @@ class Header extends Component {
     });
   };
 
-  logout = () => {
+  /*  logout = () => {
+    console.log('testtest');
+
     localStorage.removeItem(AUTH_TOKEN);
-    this.props.history.push(`/`);
-  };
+    this.props.history.push('/');
+  }; */
 
   render() {
     const authToken = localStorage.getItem(AUTH_TOKEN);
@@ -41,7 +46,13 @@ class Header extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className='ml-auto' navbar />
               {authToken ? (
-                <Button color='primary' onClick={this.logout()}>
+                <Button
+                  color='primary'
+                  onClick={() => {
+                    localStorage.removeItem(AUTH_TOKEN);
+                    this.props.history.push('/');
+                  }}
+                >
                   Test
                 </Button>
               ) : (
