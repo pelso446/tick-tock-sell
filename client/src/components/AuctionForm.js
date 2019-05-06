@@ -47,7 +47,7 @@ class Create extends Component {
           onChange={this.handleChange.bind(this, i)}
         />
         <input
-          placeholder='Price'
+          placeholder='Description'
           name='itemDescription'
           value={el.itemDescription || ''}
           onChange={this.handleChange.bind(this, i)}
