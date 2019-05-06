@@ -30,13 +30,12 @@ class App extends Component {
 
           return (
             <div className='App'>
-              <Header />
               <div className='container'>
                 <div className='panel panel-default'>
                   <div className='panel-heading'>
                     <h3 className='panel-title'>LIST OF AUCTIONS</h3>
                     <h4>
-                      <Link to='/'>Add Auction</Link>
+                      <Link to='/auctionform'>Add Auction</Link>
                     </h4>
                   </div>
                   <div className='panel-body'>
