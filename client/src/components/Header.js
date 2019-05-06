@@ -33,7 +33,8 @@ class Header extends Component {
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className='ml-auto' navbar />
-              <Link to={`/CreateAuction`}>Create New Auction</Link>
+              <Link to={`/Login`}>Logga in</Link>
+              <Link to={`/Register`}>Registrera</Link>
             </Collapse>
           </Container>
         </Navbar>

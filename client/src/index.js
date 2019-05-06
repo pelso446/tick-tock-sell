@@ -10,6 +10,11 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import AuctionForm from './components/AuctionForm';
 import Auction from './components/Auction';
 import EditAuction from './components/EditAuction';
+import Login from './components/Login';
+import Header from './components/Header';
+import Register from './components/Register';
+
+
 
 const client = new ApolloClient({
   uri: '/graphql'
@@ -19,10 +24,14 @@ ReactDOM.render(
   <ApolloProvider client={client}>
     <Router>
       <div>
+        <Header />
         <Route exact path='/' component={App} />
         <Route path='/auctionform' component={AuctionForm} />
         <Route path='/edit/:id' component={EditAuction} />
         <Route path='/show/:id' component={Auction} />
+        <Route path='/login' component={Login} />
+        <Route path='/register' component={Register} />
+
       </div>
     </Router>
   </ApolloProvider>,
