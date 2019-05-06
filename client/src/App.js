@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
-import Header from './components/Header';
+import './App.css'; /* 
+import Header from './components/Header'; */
 import 'bootstrap/dist/css/bootstrap.min.css';
 /* import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CreateAuction from './components/CreateAuction';
@@ -15,7 +15,6 @@ const GET_AUCTIONS = gql`
   {
     auctions {
       title
-      
     }
   }
 `;
@@ -23,7 +22,7 @@ const GET_AUCTIONS = gql`
 class App extends Component {
   render() {
     return (
-      <Query pollInterval={500} query={GET_AUCTIONS}>
+      <Query pollInterval={5000} query={GET_AUCTIONS}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;

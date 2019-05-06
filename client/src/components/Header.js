@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Glyphicon } from 'react-bootstrap';
+import { AUTH_TOKEN } from '../constants';
+import { Button } from 'reactstrap';
 
 import {
   Collapse,
   Navbar,
   NavbarToggler,
   NavbarBrand,
-  Nav,
+  Nav /* 
   NavItem,
-  NavLink,
+  NavLink, */,
   Container
 } from 'reactstrap';
 
@@ -24,7 +25,13 @@ class Header extends Component {
     });
   };
 
+  logout = () => {
+    localStorage.removeItem(AUTH_TOKEN);
+    this.props.history.push(`/`);
+  };
+
   render() {
+    const authToken = localStorage.getItem(AUTH_TOKEN);
     return (
       <div>
         <Navbar color='info' dark expand='sm' className='mb-5'>
@@ -33,8 +40,20 @@ class Header extends Component {
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className='ml-auto' navbar />
-              <Link to={`/Login`}>Logga in</Link>
-              <Link to={`/Register`}>Registrera</Link>
+              {authToken ? (
+                <Button color='primary' onClick={this.logout()}>
+                  Test
+                </Button>
+              ) : (
+                <React.Fragment>
+                  <Link to={`/Login`}>
+                    <Button color='primary'> Logga in</Button>
+                  </Link>
+                  <Link to={`/Register`}>
+                    <Button color='secondary'>Registrera</Button>
+                  </Link>
+                </React.Fragment>
+              )}
             </Collapse>
           </Container>
         </Navbar>
