@@ -15,6 +15,8 @@ const GET_AUCTIONS = gql`
   {
     auctions {
       title
+      description
+      startTime
     }
   }
 `;
@@ -42,7 +44,8 @@ class App extends Component {
                       <thead>
                         <tr>
                           <th>Title</th>
-                          <th>Author</th>
+                          <th>Description</th>
+                          <th>Start time</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -53,7 +56,9 @@ class App extends Component {
                                 {auction.title}
                               </Link>
                             </td>
-                            <td>{auction.title}</td>
+                            <td>{auction.description}</td>
+                            <td>{auction.startTime}</td>
+
                           </tr>
                         ))}
                       </tbody>
