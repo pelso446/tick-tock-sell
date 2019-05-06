@@ -27,24 +27,16 @@ export default {
       return { token, user };
     },
     signIn: async (root, args, { req }, info) => {
-      const user = await User.find({ email: args.email });
+      const user = await User.findOne({ email: args.email });
       if (!user) {
         throw new Error('No such user found');
       }
-      console.log('user: ' + typeof user);
-
-      console.log('arg password: ' + args.password);
-      console.log('user password: ' + user[email];
-
       const valid = await bcrypt.compare(args.password, user.password);
-      console.log('valid: ' + valid);
 
       if (!valid) {
         throw new Error('Invalid password');
       }
       const token = jwt.sign({ userId: user._id }, APP_SECRET);
-      console.log('token: ' + token);
-
       return { token, user };
     }
   },
