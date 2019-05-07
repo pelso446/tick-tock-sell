@@ -12,38 +12,40 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { AUTH_TOKEN } from '../constants';
 
-const LOGIN_MUTATION = gql`
-  mutation signIn($email: String!, $password: String!) {
-    signIn(email: $email, password: $password) {
+const REGISTER_MUTATION = gql`
+  mutation signUp($email: String!, $name: String!, $password: String!) {
+    signUp(email: $email, name: $name, password: $password) {
       token
     }
   }
 `;
 
-class Login extends Component {
+class Register extends Component {
   state = {
     email: '',
+    name: '',
     password: ''
   };
 
   render() {
-    const { email, password } = this.state;
+    const { email, name, password } = this.state;
     return (
       <Container className='App'>
-        <h2>Logga in</h2>
+        <h2>Registrera</h2>
         <Mutation
-          mutation={LOGIN_MUTATION}
-          variables={{ email, password }}
+          mutation={REGISTER_MUTATION}
+          variables={{ email, name, password }}
           onCompleted={data => this._confirm(data)}
         >
-          {(signIn, { loading, error }) => (
+          {(signUp, { loading, error }) => (
             <Form
               className='form'
               onSubmit={e => {
                 e.preventDefault();
-                signIn({
+                signUp({
                   variables: {
                     email,
+                    name,
                     password
                   }
                 });
@@ -51,7 +53,18 @@ class Login extends Component {
             >
               <Col>
                 <FormGroup>
-                  <Label>Email</Label>
+                  <Label>Namn</Label>
+                  <Input
+                    type='text'
+                    name='name'
+                    id='name'
+                    placeholder='Namn'
+                    value={name}
+                    onChange={e => this.setState({ name: e.target.value })}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label>Mail</Label>
                   <Input
                     type='email'
                     name='email'
@@ -64,7 +77,7 @@ class Login extends Component {
               </Col>
               <Col>
                 <FormGroup>
-                  <Label for='examplePassword'>Password</Label>
+                  <Label for='examplePassword'>Lösenord</Label>
                   <Input
                     type='password'
                     name='password'
@@ -75,7 +88,7 @@ class Login extends Component {
                   />
                 </FormGroup>
               </Col>
-              <Button>Login</Button>
+              <Button>Registrera</Button>
             </Form>
           )}
         </Mutation>
@@ -84,9 +97,9 @@ class Login extends Component {
   }
 
   _confirm = async data => {
-    const { token } = data.signIn.token;
-    console.log(token);
+    console.log(data);
 
+    const { token } = data.signUp.token;
     this._saveUserData(token);
     this.props.history.push(`/`);
   };
@@ -96,4 +109,4 @@ class Login extends Component {
   };
 }
 
-export default Login;
+export default Register;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
-import Header from './components/Header';
+import './App.css'; /* 
+import Header from './components/Header'; */
 import 'bootstrap/dist/css/bootstrap.min.css';
 /* import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CreateAuction from './components/CreateAuction';
@@ -15,7 +15,8 @@ const GET_AUCTIONS = gql`
   {
     auctions {
       title
-      
+      description
+      startTime
     }
   }
 `;
@@ -23,14 +24,13 @@ const GET_AUCTIONS = gql`
 class App extends Component {
   render() {
     return (
-      <Query pollInterval={500} query={GET_AUCTIONS}>
+      <Query pollInterval={5000} query={GET_AUCTIONS}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
 
           return (
             <div className='App'>
-              <Header />
               <div className='container'>
                 <div className='panel panel-default'>
                   <div className='panel-heading'>
@@ -44,7 +44,8 @@ class App extends Component {
                       <thead>
                         <tr>
                           <th>Title</th>
-                          <th>Author</th>
+                          <th>Description</th>
+                          <th>Start time</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -55,7 +56,9 @@ class App extends Component {
                                 {auction.title}
                               </Link>
                             </td>
-                            <td>{auction.title}</td>
+                            <td>{auction.description}</td>
+                            <td>{auction.startTime}</td>
+
                           </tr>
                         ))}
                       </tbody>

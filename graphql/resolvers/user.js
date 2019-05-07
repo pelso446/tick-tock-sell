@@ -1,4 +1,7 @@
 import { User, Auction } from '../../models';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { APP_SECRET, getUserId } from '../utils';
 
 export default {
   Query: {
@@ -11,8 +14,29 @@ export default {
   },
   Mutation: {
     signUp: async (root, args, { req }, info) => {
-      const user = await User.create(args);
-      return user;
+      const { name, email } = args;
+      const password = await bcrypt.hash(args.password, 10);
+      const user = await User.create({
+        name,
+        email,
+        password
+      });
+
+      const token = jwt.sign({ userId: user._id }, APP_SECRET);
+      return { token, user };
+    },
+    signIn: async (root, args, { req }, info) => {
+      const user = await User.findOne({ email: args.email });
+      if (!user) {
+        throw new Error('No such user found');
+      }
+      const valid = await bcrypt.compare(args.password, user.password);
+
+      if (!valid) {
+        throw new Error('Invalid password');
+      }
+      const token = jwt.sign({ userId: user._id }, APP_SECRET);
+      return { token, user };
     }
   },
   User: {
