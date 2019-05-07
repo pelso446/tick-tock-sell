@@ -21,7 +21,6 @@ export default {
         email,
         password
       });
-      console.log(JSON.stringify(user));
 
       const token = jwt.sign({ userId: user._id }, APP_SECRET);
       return { token, user };
