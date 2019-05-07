@@ -6,7 +6,8 @@ import {
   FormGroup,
   Label,
   Input,
-  Button
+  Button,
+  FormFeedback
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
@@ -23,7 +24,8 @@ const LOGIN_MUTATION = gql`
 class Login extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
+    formError: false
   };
 
   render() {
@@ -47,6 +49,9 @@ class Login extends Component {
                     password
                   }
                 });
+                if (error) {
+                  this.setState({ formError: true });
+                }
               }}
             >
               <Col>
@@ -59,7 +64,9 @@ class Login extends Component {
                     placeholder='myemail@email.com'
                     value={email}
                     onChange={e => this.setState({ email: e.target.value })}
+                    invalid={this.state.formError}
                   />
+                  <FormFeedback>Email eller lösenord är felaktigt</FormFeedback>
                 </FormGroup>
               </Col>
               <Col>
@@ -72,7 +79,9 @@ class Login extends Component {
                     placeholder='********'
                     value={password}
                     onChange={e => this.setState({ password: e.target.value })}
+                    invalid={this.state.formError}
                   />
+                  <FormFeedback>Email eller lösenord är felaktigt</FormFeedback>
                 </FormGroup>
               </Col>
               <Button>Login</Button>
