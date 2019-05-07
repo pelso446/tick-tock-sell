@@ -62,8 +62,9 @@ class AuctionList extends Component {
                       <thead>
                         <tr>
                           <th>Title</th>
-                          <th>Description</th>
-                          <th>Start time</th>
+                          <th>Beskrivning</th>
+                          <th>Starttid</th>
+                          <th>Säljare</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -76,6 +77,8 @@ class AuctionList extends Component {
                             </td>
                             <td>{auction.description}</td>
                             <td>{auction.startTime}</td>
+                            <td>{auction.startTime}</td>
+                            {/* <td>{auction.seller.name}</td> */}
                           </tr>
                         ))}
                       </tbody>
