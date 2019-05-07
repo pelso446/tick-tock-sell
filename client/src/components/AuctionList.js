@@ -1,34 +1,86 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem } from 'reactstrap';
+/* import { BrowserRouter as Router, Route } from 'react-router-dom';
+import CreateAuction from './components/CreateAuction';
+import AuctionList from './components/AuctionList';
+import Auction from './components/Auction'; */
 import { Link } from 'react-router-dom';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+
+const GET_AUCTIONS = gql`
+  {
+    auctions {
+      title
+      description
+      startTime
+    }
+  }
+`;
 
 class AuctionList extends Component {
-  state = {
-    auctions: [
-      { id: 1, name: 'Pär', items: 1, startingTime: '15:00' },
-      { id: 2, name: 'Stånlis', items: 13, startingTime: '12:00' }
-    ]
-  };
-
-  handleClick = () => {
-    this.props.history.push('/Auction');
-  };
-
   render() {
-    const { auctions } = this.state;
     return (
-      <div>
-        <h2>Kommande auktioner</h2>
-        <ListGroup>
-          {auctions.map(({ id, name, startingTime, items }) => (
-            <ListGroupItem action onClick={this.handleClick}>
-              {name} {items} {startingTime}
-            </ListGroupItem>
-          ))}
-        </ListGroup>
-      </div>
+      <Query pollInterval={5000} query={GET_AUCTIONS}>
+        {({ loading, error, data }) => {
+          if (loading) return 'Loading...';
+          if (error) return `Error! ${error.message}`;
+
+          return (
+            <div className='App'>
+              <div className='container'>
+                <div className='panel panel-default'>
+                  <div className='panel-heading'>
+                    <h3 className='panel-title'>LIST OF AUCTIONS</h3>
+                    <h4>
+                      <Link to='/auctionform'>Add Auction</Link>
+                    </h4>
+                  </div>
+                  <div className='panel-body'>
+                    <table className='table table-stripe'>
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>Description</th>
+                          <th>Start time</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.auctions.map((auction, index) => (
+                          <tr key={index}>
+                            <td>
+                              <Link to={`/show/${auction._id}`}>
+                                {auction.title}
+                              </Link>
+                            </td>
+                            <td>{auction.description}</td>
+                            <td>{auction.startTime}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }}
+      </Query>
     );
   }
 }
 
 export default AuctionList;
+
+/*   render() {
+    return (
+      <Router>
+      <div className='App'>     
+          <Header />
+          <Route exact path="/" component={AuctionList} />
+          <Route exact path="/CreateAuction" component={CreateAuction} />    
+          <Route exact path="/Auction" component={Auction} />  
+      </div>
+      </Router>
+    );
+  }
+} */

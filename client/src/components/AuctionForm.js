@@ -43,7 +43,7 @@ class Create extends Component {
         <input
           placeholder='Title'
           name='itemTitle'
-          value={el.itemTitle|| ''}
+          value={el.itemTitle || ''}
           onChange={this.handleChange.bind(this, i)}
         />
         <input
@@ -152,8 +152,12 @@ class Create extends Component {
                       placeholder='Start time'
                     />
                   </div>
-                  {this.createUI()}        
-                 <input type='button' value='add more' onClick={this.addClick.bind(this)}/>
+                  {this.createUI()}
+                  <input
+                    type='button'
+                    value='add more'
+                    onClick={this.addClick.bind(this)}
+                  />
                   <button type='submit' className='btn btn-success'>
                     Submit
                   </button>
