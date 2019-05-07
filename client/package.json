@@ -16,6 +16,7 @@
     "react-scripts": "2.1.8",
     "react-transition-group": "^2.9.0",
     "reactstrap": "^8.0.0",
+    "rxjs": "^6.5.1",
     "uuid": "^3.3.2"
   },
   "scripts": {

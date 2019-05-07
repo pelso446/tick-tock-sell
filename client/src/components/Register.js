@@ -11,11 +11,17 @@ import {
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { AUTH_TOKEN } from '../constants';
+import { authenticationService } from '../services/authentication.service';
 
 const REGISTER_MUTATION = gql`
   mutation signUp($email: String!, $name: String!, $password: String!) {
     signUp(email: $email, name: $name, password: $password) {
       token
+      user {
+        id
+        name
+        email
+      }
     }
   }
 `;
@@ -97,16 +103,17 @@ class Register extends Component {
   }
 
   _confirm = async data => {
-    console.log(data);
+    const userToken = data.signIn;
 
-    const { token } = data.signUp.token;
-    this._saveUserData(token);
+    /*     this._saveUserData(userToken); */
+
+    authenticationService.login(userToken);
     this.props.history.push(`/`);
   };
-
-  _saveUserData = token => {
-    localStorage.setItem(AUTH_TOKEN, token);
-  };
+  /* 
+  _saveUserData = userToken => {
+    localStorage.setItem(AUTH_TOKEN, userToken);
+  }; */
 }
 
 export default Register;

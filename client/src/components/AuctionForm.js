@@ -22,7 +22,7 @@ const ADD_AUCTION = gql`
     }
   }
 `;
-class Create extends Component {
+class AuctionForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -173,4 +173,4 @@ class Create extends Component {
   }
 }
 
-export default Create;
+export default AuctionForm;

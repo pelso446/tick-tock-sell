@@ -1,26 +1,35 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { AUTH_TOKEN } from '../constants';
-import { Button } from 'reactstrap';
 import { withRouter } from 'react-router';
+import { authenticationService } from '../services/authentication.service';
 
 import {
   Collapse,
   Navbar,
   NavbarToggler,
   NavbarBrand,
-  Nav /* 
-  NavItem,
-  NavLink, */,
-  Container
+  Nav,
+  Container,
+  Button
 } from 'reactstrap';
+
+const buttonStyle = {
+  margin: '0 0.5em'
+};
 
 class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false
+      isOpen: false,
+      user: null
     };
+  }
+
+  componentDidMount() {
+    authenticationService.currentUser.subscribe(x =>
+      this.setState({ user: x })
+    );
   }
 
   toggle = () => {
@@ -29,15 +38,8 @@ class Header extends Component {
     });
   };
 
-  /*  logout = () => {
-    console.log('testtest');
-
-    localStorage.removeItem(AUTH_TOKEN);
-    this.props.history.push('/');
-  }; */
-
   render() {
-    const authToken = localStorage.getItem(AUTH_TOKEN);
+    const { user } = this.state;
     return (
       <div>
         <Navbar color='info' dark expand='sm' className='mb-5'>
@@ -46,11 +48,16 @@ class Header extends Component {
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className='ml-auto' navbar />
-              {authToken ? (
+              {user ? (
+                <NavbarBrand color='light'>{user.user.name}</NavbarBrand>
+              ) : (
+                ''
+              )}
+              {user ? (
                 <Button
                   color='primary'
                   onClick={() => {
-                    localStorage.removeItem(AUTH_TOKEN);
+                    authenticationService.logout();
                     this.props.history.push('/');
                   }}
                 >
@@ -59,10 +66,15 @@ class Header extends Component {
               ) : (
                 <React.Fragment>
                   <Link to={`/Login`}>
-                    <Button color='primary'> Logga in</Button>
+                    <Button color='primary' style={buttonStyle}>
+                      {' '}
+                      Logga in
+                    </Button>
                   </Link>
                   <Link to={`/Register`}>
-                    <Button color='secondary'>Registrera</Button>
+                    <Button color='secondary' style={buttonStyle}>
+                      Registrera
+                    </Button>
                   </Link>
                 </React.Fragment>
               )}

@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-/* import { BrowserRouter as Router, Route } from 'react-router-dom';
-import CreateAuction from './components/CreateAuction';
-import AuctionList from './components/AuctionList';
-import Auction from './components/Auction'; */
 import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
+import { authenticationService } from '../services/authentication.service';
 
 const GET_AUCTIONS = gql`
   {
@@ -18,12 +15,30 @@ const GET_AUCTIONS = gql`
 `;
 
 class AuctionList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: authenticationService.currentUserValue
+    };
+  }
+
+  /*   componentDidMount() {
+    authenticationService.currentUser.subscribe(x =>
+      this.setState({ user: x })
+    );
+  }
+
+  componentWillUnmount() {
+    authenticationService.currentUser.
+  } */
+
   render() {
+    const { user } = this.state;
     return (
-      <Query pollInterval={5000} query={GET_AUCTIONS}>
+      <Query pollInterval={500} query={GET_AUCTIONS}>
         {({ loading, error, data }) => {
-          if (loading) return 'Loading...';
-          if (error) return `Error! ${error.message}`;
+          if (loading || error) return 'Loading...';
+          /* if (error) return 'Loading...'; */
 
           return (
             <div className='App'>
@@ -31,9 +46,16 @@ class AuctionList extends Component {
                 <div className='panel panel-default'>
                   <div className='panel-heading'>
                     <h3 className='panel-title'>LIST OF AUCTIONS</h3>
-                    <h4>
-                      <Link to='/auctionform'>Add Auction</Link>
-                    </h4>
+
+                    {user ? (
+                      <h4>
+                        <Link to={`/auctionform/${user.user.id}`}>
+                          Add Auction
+                        </Link>
+                      </h4>
+                    ) : (
+                      <p>Logga in för att skapa en auktion</p>
+                    )}
                   </div>
                   <div className='panel-body'>
                     <table className='table table-stripe'>
@@ -70,17 +92,3 @@ class AuctionList extends Component {
 }
 
 export default AuctionList;
-
-/*   render() {
-    return (
-      <Router>
-      <div className='App'>     
-          <Header />
-          <Route exact path="/" component={AuctionList} />
-          <Route exact path="/CreateAuction" component={CreateAuction} />    
-          <Route exact path="/Auction" component={Auction} />  
-      </div>
-      </Router>
-    );
-  }
-} */

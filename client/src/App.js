@@ -16,35 +16,41 @@ import {
   Register,
   EditAuction
 } from './components';
-/* 
-import AuctionForm from './components/AuctionForm';
-import Auction from './components/Auction';
-import EditAuction from './components/EditAuction';
-import Login from './components/Login';
-import Header from './components/Header';
-import Register from './components/Register'; */
+import { authenticationService } from './services/authentication.service';
 
 const httpLink = createHttpLink({
   uri: '/graphql'
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem(AUTH_TOKEN);
+  const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : ''
+      authorization: userToken.token ? `Bearer ${userToken.token}` : ''
     }
   };
 });
 
 const client = new ApolloClient({
-  /*  uri: '/graphql', */
   link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 });
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      user: null
+    };
+  }
+
+  componentDidMount() {
+    authenticationService.currentUser.subscribe(x =>
+      this.setState({ user: x })
+    );
+  }
   render() {
     return (
       <ApolloProvider client={client}>
@@ -52,7 +58,7 @@ class App extends Component {
           <div>
             <Header />
             <Route exact path='/' component={AuctionList} />
-            <Route path='/auctionform' component={AuctionForm} />
+            <Route path='/auctionform/:id' component={AuctionForm} />
             <Route path='/edit/:id' component={EditAuction} />
             <Route path='/show/:id' component={Auction} />
             <Route path='/login' component={Login} />
@@ -65,17 +71,3 @@ class App extends Component {
 }
 
 export default App;
-
-/*   render() {
-    return (
-      <Router>
-      <div className='App'>     
-          <Header />
-          <Route exact path="/" component={AuctionList} />
-          <Route exact path="/CreateAuction" component={CreateAuction} />    
-          <Route exact path="/Auction" component={Auction} />  
-      </div>
-      </Router>
-    );
-  }
-} */
