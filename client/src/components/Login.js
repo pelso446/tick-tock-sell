@@ -12,11 +12,17 @@ import {
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { AUTH_TOKEN } from '../constants';
+import { authenticationService } from '../services/authentication.service';
 
 const LOGIN_MUTATION = gql`
   mutation signIn($email: String!, $password: String!) {
     signIn(email: $email, password: $password) {
       token
+      user {
+        id
+        name
+        email
+      }
     }
   }
 `;
@@ -93,16 +99,16 @@ class Login extends Component {
   }
 
   _confirm = async data => {
-    const { token } = data.signIn.token;
-    console.log(token);
+    const userToken = data.signIn; /* 
 
-    this._saveUserData(token);
+    this._saveUserData(userToken); */
+    authenticationService.login(userToken);
     this.props.history.push(`/`);
   };
 
-  _saveUserData = token => {
-    localStorage.setItem(AUTH_TOKEN, token);
-  };
+  /*   _saveUserData = userToken => {
+    localStorage.setItem(AUTH_TOKEN, JSON.stringify(userToken));
+  }; */
 }
 
 export default Login;

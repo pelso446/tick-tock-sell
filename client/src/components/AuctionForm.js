@@ -2,6 +2,22 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { Link } from 'react-router-dom';
+import { authenticationService } from '../services/authentication.service';
+import {
+  Container,
+  Col,
+  Row,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  FormFeedback
+} from 'reactstrap';
+
+const buttonStyle = {
+  margin: '0 0.5em'
+};
 
 const ADD_AUCTION = gql`
   mutation createAuction(
@@ -22,11 +38,12 @@ const ADD_AUCTION = gql`
     }
   }
 `;
-class Create extends Component {
+class AuctionForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [{ itemTitle: '', itemDescription: '', itemPrice: '' }]
+      items: [{ itemTitle: '', itemDescription: '', itemPrice: '' }],
+      user: authenticationService.currentUserValue
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -43,30 +60,48 @@ class Create extends Component {
   createUI() {
     return this.state.items.map((el, i) => (
       <div key={i}>
-        <input
-          placeholder='Title'
-          name='itemTitle'
-          value={el.itemTitle || ''}
-          onChange={this.handleChange.bind(this, i)}
-        />
-        <input
-          placeholder='Description'
-          name='itemDescription'
-          value={el.itemDescription || ''}
-          onChange={this.handleChange.bind(this, i)}
-        />
-        <input
-          placeholder='Price'
-          name='itemPrice'
-          pattern='[0-9]*'
-          value={parseInt(el.itemPrice) || ''}
-          onChange={this.handleChange.bind(this, i)}
-        />
-        <input
-          type='button'
-          value='remove'
-          onClick={this.removeClick.bind(this, i)}
-        />
+        <Row>
+          <Col>
+            <FormGroup>
+              <Input
+                placeholder='Titel'
+                name='itemTitle'
+                value={el.itemTitle || ''}
+                onChange={this.handleChange.bind(this, i)}
+                style={{ marginLeft: '15px' }}
+              />
+            </FormGroup>
+          </Col>
+
+          <Col>
+            <FormGroup>
+              <Input
+                placeholder='Beskrivning'
+                name='itemDescription'
+                value={el.itemDescription || ''}
+                onChange={this.handleChange.bind(this, i)}
+              />
+            </FormGroup>
+          </Col>
+          <Col>
+            <FormGroup>
+              <Input
+                placeholder='Pris'
+                name='itemPrice'
+                pattern='[0-9]*'
+                value={parseInt(el.itemPrice) || ''}
+                onChange={this.handleChange.bind(this, i)}
+              />
+            </FormGroup>
+          </Col>
+          <Col>
+            <FormGroup>
+              <Button color='danger' onClick={this.removeClick.bind(this, i)}>
+                X
+              </Button>
+            </FormGroup>
+          </Col>
+        </Row>
       </div>
     ));
   }
@@ -96,96 +131,98 @@ class Create extends Component {
 
   render() {
     let title, description, startTime;
+    const { user } = this.state;
     return (
       <Mutation
         mutation={ADD_AUCTION}
         onCompleted={() => this.props.history.push('/')}
       >
         {(createAuction, { loading, error }) => (
-          <div className='container'>
-            <div className='panel panel-default'>
-              <div className='panel-heading'>
-                <h3 className='panel-title'>ADD AUCTION</h3>
-              </div>
-              <div className='panel-body'>
-                <h4>
-                  <Link to='/' className='btn btn-primary'>
-                    Auction List
-                  </Link>
-                </h4>
-                <form
-                  onSubmit={e => {
-                    e.preventDefault();
-                    createAuction({
-                      variables: {
-                        sellerID: '5ccabaf90ae5a1153a0f5e14',
-                        title: title.value,
-                        description: description.value,
-                        startTime: startTime.value,
-                        items: this.state.items
-                      }
-                    });
-                    title.value = '';
-                    description.value = '';
-                    startTime.value = '';
-                  }}
-                >
-                  <div className='form-group'>
-                    <label htmlFor='title'>Title:</label>
-                    <input
-                      type='text'
-                      className='form-control'
-                      name='title'
-                      ref={node => {
-                        title = node;
-                      }}
-                      placeholder='Title'
-                    />
-                  </div>
-                  <div className='form-group'>
-                    <label htmlFor='description'>Description:</label>
-                    <textarea
-                      className='form-control'
-                      name='description'
-                      ref={node => {
-                        description = node;
-                      }}
-                      placeholder='Description'
-                      cols='80'
-                      rows='3'
-                    />
-                  </div>
-                  <div className='form-group'>
-                    <label htmlFor='start_time'>Start TIME</label>
-                    <input
-                      type='text'
-                      className='form-control'
-                      name='start_time'
-                      ref={node => {
-                        startTime = node;
-                      }}
-                      placeholder='Start time'
-                    />
-                  </div>
-                  {this.createUI()}
+          <Container>
+            <h3 className='panel-title'>Skapa Auktion</h3>
+            <Form
+              onSubmit={e => {
+                e.preventDefault();
+                console.log(
+                  user.user.id,
+                  title.value,
+                  description.value,
+                  startTime.value,
+                  this.state.items
+                );
+
+                createAuction({
+                  variables: {
+                    sellerID: user.user.id,
+                    title: title.value,
+                    description: description.value,
+                    startTime: startTime.value,
+                    items: this.state.items
+                  }
+                });
+                title.value = '';
+                description.value = '';
+                startTime.value = '';
+              }}
+            >
+              <Col>
+                <FormGroup>
+                  <Label htmlFor='title'>Titel:</Label>
                   <input
-                    type='button'
-                    value='add more'
-                    onClick={this.addClick.bind(this)}
+                    type='text'
+                    className='form-control'
+                    name='title'
+                    ref={node => {
+                      title = node;
+                    }}
+                    placeholder='Titel'
                   />
-                  <button type='submit' className='btn btn-success'>
-                    Submit
-                  </button>
-                </form>
-                {loading && <p>Loading...</p>}
-                {error && <p>Error :( Please try again</p>}
-              </div>
-            </div>
-          </div>
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label htmlFor='description'>Beskrivning:</Label>
+                  <textarea
+                    className='form-control'
+                    name='description'
+                    ref={node => {
+                      description = node;
+                    }}
+                    placeholder='Beskrivning'
+                    cols='80'
+                    rows='3'
+                  />
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label htmlFor='start_time'>Starttid</Label>
+                  <input
+                    type='text'
+                    className='form-control'
+                    name='start_time'
+                    ref={node => {
+                      startTime = node;
+                    }}
+                    placeholder='Starttid'
+                  />
+                </FormGroup>
+              </Col>
+              {this.createUI()}
+              <Button style={buttonStyle} onClick={this.addClick.bind(this)}>
+                Lägg till
+              </Button>
+              <Button style={buttonStyle} type='submit' color='success'>
+                Skapa auktion
+              </Button>
+            </Form>
+            {loading && <p>Loading...</p>}
+            {error && <p>Error :( Please try again</p>}
+          </Container>
         )}
       </Mutation>
     );
   }
 }
 
-export default Create;
+export default AuctionForm;
