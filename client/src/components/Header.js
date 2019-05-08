@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Glyphicon } from 'react-bootstrap';
+import { withRouter } from 'react-router';
+import { authenticationService } from '../services/authentication.service';
 
 import {
   Collapse,
@@ -8,15 +9,28 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem,
-  NavLink,
-  Container
+  Container,
+  Button
 } from 'reactstrap';
 
+const buttonStyle = {
+  margin: '0 0.5em'
+};
+
 class Header extends Component {
-  state = {
-    isOpen: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false,
+      user: null
+    };
+  }
+
+  componentDidMount() {
+    authenticationService.currentUser.subscribe(x =>
+      this.setState({ user: x })
+    );
+  }
 
   toggle = () => {
     this.setState({
@@ -25,6 +39,7 @@ class Header extends Component {
   };
 
   render() {
+    const { user } = this.state;
     return (
       <div>
         <Navbar color='info' dark expand='sm' className='mb-5'>
@@ -33,7 +48,36 @@ class Header extends Component {
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className='ml-auto' navbar />
-              <Link to={`/CreateAuction`}>Create New Auction</Link>
+              {user ? (
+                <NavbarBrand color='light'>{user.user.name}</NavbarBrand>
+              ) : (
+                ''
+              )}
+              {user ? (
+                <Button
+                  color='primary'
+                  onClick={() => {
+                    authenticationService.logout();
+                    this.props.history.push('/');
+                  }}
+                >
+                  Logga ut
+                </Button>
+              ) : (
+                <React.Fragment>
+                  <Link to={`/Login`}>
+                    <Button color='primary' style={buttonStyle}>
+                      {' '}
+                      Logga in
+                    </Button>
+                  </Link>
+                  <Link to={`/Register`}>
+                    <Button color='secondary' style={buttonStyle}>
+                      Registrera
+                    </Button>
+                  </Link>
+                </React.Fragment>
+              )}
             </Collapse>
           </Container>
         </Navbar>
@@ -42,4 +86,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default withRouter(Header);
