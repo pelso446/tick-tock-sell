@@ -58,7 +58,7 @@ class App extends Component {
           <div>
             <Header />
             <Route exact path='/' component={AuctionList} />
-            <Route path='/auctionform/:id' component={AuctionForm} />
+            <Route path='/auctionform' component={AuctionForm} />
             <Route path='/edit/:id' component={EditAuction} />
             <Route path='/show/:id' component={AuctionPage} />
             <Route path='/login' component={Login} />

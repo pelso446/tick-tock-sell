@@ -11,6 +11,9 @@ const GET_AUCTIONS = gql`
       title
       description
       startTime
+      seller {
+        name
+      }
     }
   }
 `;
@@ -46,13 +49,11 @@ class AuctionList extends Component {
               <div className='container'>
                 <div className='panel panel-default'>
                   <div className='panel-heading'>
-                    <h3 className='panel-title'>LIST OF AUCTIONS</h3>
+                    <h3 className='panel-title'>Kommande Auktioner</h3>
 
                     {user ? (
                       <h4>
-                        <Link to={`/auctionform/${user.user.id}`}>
-                          Add Auction
-                        </Link>
+                        <Link to={'/auctionform/'}>Lägg till auktion</Link>
                       </h4>
                     ) : (
                       <p>Logga in för att skapa en auktion</p>
@@ -62,7 +63,7 @@ class AuctionList extends Component {
                     <table className='table table-stripe'>
                       <thead>
                         <tr>
-                          <th>Title</th>
+                          <th>Titel</th>
                           <th>Beskrivning</th>
                           <th>Starttid</th>
                           <th>Säljare</th>
@@ -78,8 +79,7 @@ class AuctionList extends Component {
                             </td>
                             <td>{auction.description}</td>
                             <td>{auction.startTime}</td>
-                            <td>{auction.startTime}</td>
-                            {/* <td>{auction.seller.name}</td> */}
+                            <td>{auction.seller.name}</td>
                           </tr>
                         ))}
                       </tbody>

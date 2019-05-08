@@ -213,7 +213,7 @@ class AuctionForm extends Component {
                 Lägg till
               </Button>
               <Button style={buttonStyle} type='submit' color='success'>
-                Submit
+                Skapa auktion
               </Button>
             </Form>
             {loading && <p>Loading...</p>}
