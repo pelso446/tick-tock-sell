@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { Link } from 'react-router-dom';
+import { authenticationService } from '../services/authentication.service';
 import {
   Container,
   Col,
@@ -41,7 +42,8 @@ class AuctionForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [{ itemTitle: '', itemDescription: '', itemPrice: '' }]
+      items: [{ itemTitle: '', itemDescription: '', itemPrice: '' }],
+      user: authenticationService.currentUserValue
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -129,6 +131,7 @@ class AuctionForm extends Component {
 
   render() {
     let title, description, startTime;
+    const { user } = this.state;
     return (
       <Mutation
         mutation={ADD_AUCTION}
@@ -140,9 +143,17 @@ class AuctionForm extends Component {
             <Form
               onSubmit={e => {
                 e.preventDefault();
+                console.log(
+                  user.user.id,
+                  title.value,
+                  description.value,
+                  startTime.value,
+                  this.state.items
+                );
+
                 createAuction({
                   variables: {
-                    sellerID: '5ccabaf90ae5a1153a0f5e14',
+                    sellerID: user.user.id,
                     title: title.value,
                     description: description.value,
                     startTime: startTime.value,
@@ -157,7 +168,7 @@ class AuctionForm extends Component {
               <Col>
                 <FormGroup>
                   <Label htmlFor='title'>Titel:</Label>
-                  <Input
+                  <input
                     type='text'
                     className='form-control'
                     name='title'
