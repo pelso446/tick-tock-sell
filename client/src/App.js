@@ -14,6 +14,7 @@ import { Query } from 'react-apollo';
 const GET_AUCTIONS = gql`
   {
     auctions {
+      id
       title
       description
       startTime
@@ -52,13 +53,12 @@ class App extends Component {
                         {data.auctions.map((auction, index) => (
                           <tr key={index}>
                             <td>
-                              <Link to={`/show/${auction._id}`}>
+                              <Link to={`/show/${auction.id}`}>
                                 {auction.title}
                               </Link>
                             </td>
                             <td>{auction.description}</td>
                             <td>{auction.startTime}</td>
-
                           </tr>
                         ))}
                       </tbody>
@@ -75,17 +75,3 @@ class App extends Component {
 }
 
 export default App;
-
-/*   render() {
-    return (
-      <Router>
-      <div className='App'>     
-          <Header />
-          <Route exact path="/" component={AuctionList} />
-          <Route exact path="/CreateAuction" component={CreateAuction} />    
-          <Route exact path="/Auction" component={Auction} />  
-      </div>
-      </Router>
-    );
-  }
-} */
