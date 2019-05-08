@@ -26,14 +26,17 @@ class Create extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [{ itemTitle: '', itemDescription: '' }]
+      items: [{ itemTitle: '', itemDescription: '', itemPrice: '' }]
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   addClick() {
     this.setState(prevState => ({
-      items: [...prevState.items, { itemTitle: '', itemDescription: '' }]
+      items: [
+        ...prevState.items,
+        { itemTitle: '', itemDescription: '', itemPrice: '' }
+      ]
     }));
   }
 
@@ -43,13 +46,20 @@ class Create extends Component {
         <input
           placeholder='Title'
           name='itemTitle'
-          value={el.itemTitle|| ''}
+          value={el.itemTitle || ''}
           onChange={this.handleChange.bind(this, i)}
         />
         <input
           placeholder='Description'
           name='itemDescription'
           value={el.itemDescription || ''}
+          onChange={this.handleChange.bind(this, i)}
+        />
+        <input
+          placeholder='Price'
+          name='itemPrice'
+          pattern='[0-9]*'
+          value={parseInt(el.itemPrice) || ''}
           onChange={this.handleChange.bind(this, i)}
         />
         <input
@@ -64,7 +74,12 @@ class Create extends Component {
   handleChange(i, e) {
     const { name, value } = e.target;
     let items = [...this.state.items];
-    items[i] = { ...items[i], [name]: value };
+
+    items[i] = {
+      ...items[i],
+      [name]:
+        name === 'itemPrice' || name === 'duration' ? parseInt(value) : value
+    };
     this.setState({ items });
   }
 
@@ -152,8 +167,12 @@ class Create extends Component {
                       placeholder='Start time'
                     />
                   </div>
-                  {this.createUI()}        
-                 <input type='button' value='add more' onClick={this.addClick.bind(this)}/>
+                  {this.createUI()}
+                  <input
+                    type='button'
+                    value='add more'
+                    onClick={this.addClick.bind(this)}
+                  />
                   <button type='submit' className='btn btn-success'>
                     Submit
                   </button>
