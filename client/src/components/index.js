@@ -1,4 +1,4 @@
-export { default as Auction } from './Auction';
+export { default as AuctionPage } from './AuctionPage';
 export { default as AuctionForm } from './AuctionForm';
 export { default as AuctionList } from './AuctionList';
 export { default as Header } from './Header';

@@ -10,7 +10,7 @@ import { AUTH_TOKEN } from './constants';
 import {
   AuctionList,
   AuctionForm,
-  Auction,
+  AuctionPage,
   Login,
   Header,
   Register,
@@ -40,7 +40,6 @@ const client = new ApolloClient({
 class App extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       user: null
     };
@@ -51,6 +50,7 @@ class App extends Component {
       this.setState({ user: x })
     );
   }
+
   render() {
     return (
       <ApolloProvider client={client}>
@@ -60,7 +60,7 @@ class App extends Component {
             <Route exact path='/' component={AuctionList} />
             <Route path='/auctionform/:id' component={AuctionForm} />
             <Route path='/edit/:id' component={EditAuction} />
-            <Route path='/show/:id' component={Auction} />
+            <Route path='/show/:id' component={AuctionPage} />
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
           </div>

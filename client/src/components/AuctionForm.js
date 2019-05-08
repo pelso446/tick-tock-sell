@@ -41,14 +41,17 @@ class AuctionForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [{ itemTitle: '', itemDescription: '' }]
+      items: [{ itemTitle: '', itemDescription: '', itemPrice: '' }]
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   addClick() {
     this.setState(prevState => ({
-      items: [...prevState.items, { itemTitle: '', itemDescription: '' }]
+      items: [
+        ...prevState.items,
+        { itemTitle: '', itemDescription: '', itemPrice: '' }
+      ]
     }));
   }
 
@@ -71,9 +74,20 @@ class AuctionForm extends Component {
           <Col>
             <FormGroup>
               <Input
-                placeholder='Pris'
+                placeholder='Beskrivning'
                 name='itemDescription'
                 value={el.itemDescription || ''}
+                onChange={this.handleChange.bind(this, i)}
+              />
+            </FormGroup>
+          </Col>
+          <Col>
+            <FormGroup>
+              <Input
+                placeholder='Pris'
+                name='itemPrice'
+                pattern='[0-9]*'
+                value={parseInt(el.itemPrice) || ''}
                 onChange={this.handleChange.bind(this, i)}
               />
             </FormGroup>
@@ -93,7 +107,12 @@ class AuctionForm extends Component {
   handleChange(i, e) {
     const { name, value } = e.target;
     let items = [...this.state.items];
-    items[i] = { ...items[i], [name]: value };
+
+    items[i] = {
+      ...items[i],
+      [name]:
+        name === 'itemPrice' || name === 'duration' ? parseInt(value) : value
+    };
     this.setState({ items });
   }
 

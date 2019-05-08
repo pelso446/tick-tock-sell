@@ -7,6 +7,7 @@ import { authenticationService } from '../services/authentication.service';
 const GET_AUCTIONS = gql`
   {
     auctions {
+      id
       title
       description
       startTime
@@ -71,7 +72,7 @@ class AuctionList extends Component {
                         {data.auctions.map((auction, index) => (
                           <tr key={index}>
                             <td>
-                              <Link to={`/show/${auction._id}`}>
+                              <Link to={`/show/${auction.id}`}>
                                 {auction.title}
                               </Link>
                             </td>
