@@ -4,7 +4,11 @@ import { AuthenticationError } from 'apollo-server-express';
 export default {
   Query: {
     auctions: (root, args, context, info) => {
-      return Auction.find({});
+      if (args.sellerID) {
+        return Auction.find({ seller: args.sellerID });
+      } else {
+        return Auction.find({});
+      }
     },
     auction: async (root, args, context, info) => {
       return Auction.findById(args.id);
