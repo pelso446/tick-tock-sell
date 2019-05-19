@@ -47,8 +47,7 @@ class MyPage extends Component {
     const sellerID = user.user.id;
     return (
       <Query query={GET_AUCTION} variables={{ sellerID: sellerID }}>
-        {({ loading, error, data, refetch}) => {
-          console.log(sellerID);
+        {({ loading, error, data, refetch }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
 

@@ -1,5 +1,6 @@
 import { Auction, Item, User } from '../../models';
 import { AuthenticationError } from 'apollo-server-express';
+import schedule from 'node-schedule';
 
 export default {
   Query: {
@@ -49,6 +50,10 @@ export default {
           });
         });
       }
+
+      /*       var j = schedule.scheduleJob(startTime, function() {
+        log('Job has started');
+      }); */
 
       return auction;
     },
@@ -111,7 +116,6 @@ export default {
             { validationErrors }
           );
         } else {
-          console.log(res);
           return res;
         }
       });

@@ -18,6 +18,22 @@ const GET_AUCTIONS = gql`
   }
 `;
 
+function Time(props) {
+  console.log(props.timestamp);
+  console.log(typeof props.timestamp);
+  const time = new Date(parseInt(props.timestamp));
+  console.log(time.toLocaleTimeString());
+
+  return (
+    <div>
+      {time
+        .toLocaleTimeString()
+        .toString()
+        .substr(0, 5)}
+    </div>
+  );
+}
+
 class AuctionList extends Component {
   constructor(props) {
     super(props);
@@ -78,7 +94,9 @@ class AuctionList extends Component {
                               </Link>
                             </td>
                             <td>{auction.description}</td>
-                            <td>{auction.startTime}</td>
+                            <td>
+                              <Time timestamp={auction.startTime} />
+                            </td>
                             <td>{auction.seller.name}</td>
                           </tr>
                         ))}
