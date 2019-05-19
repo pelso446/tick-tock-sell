@@ -14,9 +14,16 @@ const GET_AUCTION = gql`
       description
       startTime
       items {
+        id
         title
         description
         price
+        highestBid {
+          amount
+          bidder {
+            name
+          }
+        }
       }
     }
   }
@@ -40,7 +47,6 @@ class AuctionPage extends Component {
       user: authenticationService.currentUserValue
     };
     //this.handleSubmit = this.handleSubmit.bind(this);
-
   }
 
   render() {
@@ -49,101 +55,125 @@ class AuctionPage extends Component {
     const auctionID = this.props.match.params.id;
     return (
       <Query query={GET_AUCTION} variables={{ id: auctionID }}>
-        {({ loading, error, data }) => {
+        {({ loading, error, data, refetch }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
 
           return (
-            <Mutation mutation={PUT_BID}
-            onCompleted={() => this.props.history.push('/')}>
-              {(PutBid, { loading, error }) => (
-                <div>
-                  <Form
-                    onSubmit={e => {
-                      console.log(
-                        amount.value,
-                        user.user.id,
-                      );
-                      e.preventDefault();
-                      PutBid({
-                        variables: {
-                          itemID: '5cd27f3dd160de3c985a1c7d',
-                          bidderID: user.user.id,
-                          amount: 50 //SATAN why validationerror?+??????
-                        }
-                      });
-                      amount.value = '';
-                    }}
-                  >
-                    <div className='App'>
-                      <div className='container'>
-                        <div className='panel panel-default'>
-                          <div className='panel-heading'>
-                            <h3 className='panel-title'>
-                              {data.auction.title}
-                            </h3>
-                          </div>
-                          <div className='panel-body'>
-                            <table className='table table-stripe'>
-                              <thead>
-                                <tr>
-                                  <th>Title</th>
-                                  <th>Description</th>
-                                  <th>Price</th>
-                                  <th>Highest Bid</th>
-                                  <th>Bidder</th>
-                                  <th />
-                                  <th />
-                                  <th />
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {data.auction.items.map((item, index) => (
+            <div>
+              <div className='App'>
+                <div className='container'>
+                  <div className='panel panel-default'>
+                    <div className='panel-heading'>
+                      <h3 className='panel-title'>{data.auction.title}</h3>
+                    </div>
+                    <div className='panel-body'>
+                      <table className='table table-stripe'>
+                        <thead>
+                          <tr>
+                            <th>Titel</th>
+                            <th>Beskrivning</th>
+                            <th>Utgångspris</th>
+                            <th>Högsta bud</th>
+                            <th>Senaste Budgivare</th>
+                            <th />
+                            <th />
+                            <th />
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {data.auction.items.map((item, index) => {
+                            return (
+                              <Mutation mutation={PUT_BID} key={item.id}>
+                                {(PutBid, { loading, error }) => (
                                   <tr key={index}>
                                     <td>{item.title}</td>
                                     <td>{item.description}</td>
                                     <td>{item.price}</td>
-                                    <td>Highest bid</td>
-                                    <td>Bidder</td>
                                     <td>
-                                      <FormGroup>
-                                        <Label htmlFor='amount'>amount:</Label>
-                                        <textarea
-                                          className='form-control'
-                                          name='amount'
-                                          ref={node => {
-                                            amount = node;
-                                          }}
-                                          placeholder='Beskrivning'
-                                          cols='80'
-                                          rows='3'
-                                        />
-                                      </FormGroup>
-                                      <Button color='success' type='submit'>
+                                      {item.highestBid
+                                        ? item.highestBid.amount
+                                        : 'Inget bud har lagts'}
+                                    </td>
+                                    <td>
+                                      {item.highestBid
+                                        ? item.highestBid.bidder.name
+                                        : 'Inget bud har lagts'}
+                                    </td>
+                                    <td>
+                                      <Button
+                                        color='success'
+                                        onClick={() =>
+                                          PutBid({
+                                            variables: {
+                                              itemID: item.id,
+                                              bidderID: user.user.id,
+                                              amount: item.highestBid
+                                                ? item.highestBid.amount + 5
+                                                : item.price + 5
+                                            }
+                                          }).then(() => refetch())
+                                        }
+                                      >
                                         + 5 KR
                                       </Button>
                                     </td>
                                     <td>
-                                      <Button color='primary'>+ 10 KR</Button>
+                                      <Button
+                                        color='primary'
+                                        onClick={() =>
+                                          PutBid({
+                                            variables: {
+                                              itemID: item.id,
+                                              bidderID: user.user.id,
+                                              amount: item.highestBid
+                                                ? item.highestBid.amount + 10
+                                                : item.price + 10
+                                            }
+                                          }).then(() => refetch())
+                                        }
+                                      >
+                                        + 10 KR
+                                      </Button>
                                     </td>
                                     <td>
-                                      <Button color='danger'>+ 50 KR</Button>
+                                      <Button
+                                        color='danger'
+                                        onClick={() =>
+                                          PutBid({
+                                            variables: {
+                                              itemID: item.id,
+                                              bidderID: user.user.id,
+                                              amount: item.highestBid
+                                                ? item.highestBid.amount + 20
+                                                : item.price + 20
+                                            }
+                                          }).then(() => refetch())
+                                        }
+                                      >
+                                        + 20 KR
+                                      </Button>
+                                      <div>
+                                        {loading && <p>Loading...</p>}
+                                        {error && (
+                                          <p>Error :( Please try again</p>
+                                        )}
+                                      </div>
                                     </td>
                                   </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                            <div> </div>
-                          </div>
-                        </div>
-                      </div>
+                                )}
+                              </Mutation>
+                            );
+                          })}
+                        </tbody>
+                      </table>
                     </div>
-                  </Form>
-                  {loading && <p>Loading...</p>}
-                  {error && <p>Error :( Please try again</p>}
+                  </div>
                 </div>
-              )}
-            </Mutation>
+              </div>
+              {loading && <p>Loading...</p>}
+              {error && <p>Error :( Please try again</p>}
+            </div>
           );
         }}
       </Query>
