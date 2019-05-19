@@ -19,7 +19,7 @@ export default gql`
   type Item {
     id: ID!
     auction: Auction!
-    bids: [Bid!]!
+    bids: [Bid!]
     highestBid: Bid
     title: String!
     description: String

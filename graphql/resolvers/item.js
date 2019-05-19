@@ -37,10 +37,11 @@ export default {
       //console.log(JSON.stringify(item));
       return await Auction.findById(item.auction);
     },
-    //Use populate
+    bids: async (item, args, context, info) => {
+      return await Bid.find({ item: item._id });
+    },
     highestBid: async (item, args, context, info) => {
-      //console.log(JSON.stringify(item));
-      return await Bid.findById(item.highestBid);
+      return (await item.populate('highestBid').execPopulate()).highestBid;
     }
   }
 };
