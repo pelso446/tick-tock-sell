@@ -49,7 +49,8 @@ class Header extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className='ml-auto' navbar />
               {user ? (
-                <NavbarBrand color='light'>{user.user.name}</NavbarBrand>
+                 
+                <NavbarBrand color='light'> <Link to={`/MyPage`}> {user.user.name} </Link></NavbarBrand>
               ) : (
                 ''
               )}

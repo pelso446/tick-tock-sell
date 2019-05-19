@@ -14,6 +14,7 @@ import {
   Login,
   Header,
   Register,
+  MyPage,
   EditAuction
 } from './components';
 import { authenticationService } from './services/authentication.service';
@@ -62,6 +63,7 @@ class App extends Component {
             <Route path='/edit/:id' component={EditAuction} />
             <Route path='/show/:id' component={AuctionPage} />
             <Route path='/login' component={Login} />
+            <Route path='/mypage' component={MyPage} />
             <Route path='/register' component={Register} />
           </div>
         </Router>
