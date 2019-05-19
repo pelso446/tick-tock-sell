@@ -7,7 +7,7 @@ import config from 'config';
 import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 //import expressGraphQL from 'express-graphql';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, PubSub } from 'apollo-server-express';
 
 const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
@@ -20,6 +20,7 @@ app.use(express.json());
 
 // DB Config
 const db = config.get('mongoURI');
+
 
 // Connect to MongoDB Atlas
 mongoose

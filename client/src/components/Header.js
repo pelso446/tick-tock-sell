@@ -48,8 +48,7 @@ class Header extends Component {
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className='ml-auto' navbar />
-              {user ? (
-                 
+              {user ? (               
                 <NavbarBrand color='light'> <Link to={`/MyPage`}> {user.user.name} </Link></NavbarBrand>
               ) : (
                 ''

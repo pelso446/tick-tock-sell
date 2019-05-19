@@ -17,4 +17,8 @@ export default gql`
     createdAt: String!
     updatedAt: String!
   }
+
+  extend type Subscription{
+    bidAdded: Bid!
+  }
 `;
