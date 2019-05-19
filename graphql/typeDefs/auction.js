@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-express';
 export default gql`
   extend type Query {
     auction(id: ID!): Auction
-    auctions: [Auction!]!
+    auctions(sellerID: ID): [Auction!]!
   }
   extend type Mutation {
     createAuction(
