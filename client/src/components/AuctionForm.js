@@ -24,7 +24,7 @@ const ADD_AUCTION = gql`
     $sellerID: ID!
     $title: String!
     $description: String!
-    $startTime: Date!
+    $startTime: String!
     $items: [itemInput!]!
   ) {
     createAuction(
@@ -143,6 +143,7 @@ class AuctionForm extends Component {
             <Form
               onSubmit={e => {
                 e.preventDefault();
+                console.log(startTime.value + typeof startTime.value);
 
                 createAuction({
                   variables: {

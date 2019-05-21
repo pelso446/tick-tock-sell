@@ -29,7 +29,9 @@ function Time(props) {
       {time
         .toLocaleTimeString()
         .toString()
-        .substr(0, 5)}
+        .substr(0, 5) +
+        ', ' +
+        time.toLocaleDateString().toString()}
     </div>
   );
 }
