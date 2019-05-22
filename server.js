@@ -8,6 +8,13 @@ import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 //import expressGraphQL from 'express-graphql';
 import { ApolloServer, PubSub } from 'apollo-server-express';
+import { execute, subscribe } from 'graphql';
+import { createServer } from 'http';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import {
+  graphqlExpress,
+  graphiqlExpress,
+} from 'apollo-server-express';
 
 const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
@@ -20,7 +27,6 @@ app.use(express.json());
 
 // DB Config
 const db = config.get('mongoURI');
-
 
 // Connect to MongoDB Atlas
 mongoose
@@ -55,8 +61,34 @@ if (IN_PROD) {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () =>
   console.log(`Server started on http://localhost:${PORT}${server.graphqlPath}`)
 );
+
+server.use('/graphiql', graphiqlExpress({
+  subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`
+}));
+
+
+// Wrap the Express server
+const ws = createServer(server);
+
+ws.listen(PORT, () => {
+  console.log(`Apollo Server is now running on http://localhost:${PORT}`);
+
+  // Set up the WebSocket for handling GraphQL subscriptions
+  new SubscriptionServer(
+    {
+      execute,
+      subscribe
+      //Schema
+    },
+    {
+      server: ws,
+      path: '/subscriptions'
+    }
+  );
+  })
