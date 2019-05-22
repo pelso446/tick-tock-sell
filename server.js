@@ -11,10 +11,7 @@ import { ApolloServer, PubSub } from 'apollo-server-express';
 import { execute, subscribe } from 'graphql';
 import { createServer } from 'http';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
-import {
-  graphqlExpress,
-  graphiqlExpress,
-} from 'apollo-server-express';
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 
 const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
@@ -45,6 +42,7 @@ mongoose
     graphiql: true
   })
 ); */
+const pubsub = new PubSub();
 
 const server = new ApolloServer({
   typeDefs,
@@ -64,31 +62,10 @@ if (IN_PROD) {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () =>
-  console.log(`Server started on http://localhost:${PORT}${server.graphqlPath}`)
-);
+const httpServer = createServer(app);
+server.installSubscriptionHandlers(httpServer);
 
-server.use('/graphiql', graphiqlExpress({
-  subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`
-}));
-
-
-// Wrap the Express server
-const ws = createServer(server);
-
-ws.listen(PORT, () => {
-  console.log(`Apollo Server is now running on http://localhost:${PORT}`);
-
-  // Set up the WebSocket for handling GraphQL subscriptions
-  new SubscriptionServer(
-    {
-      execute,
-      subscribe
-      //Schema
-    },
-    {
-      server: ws,
-      path: '/subscriptions'
-    }
-  );
-  })
+httpServer.listen({ port: PORT }, () =>{
+  console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
+  console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`)
+})
