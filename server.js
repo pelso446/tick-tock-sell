@@ -14,6 +14,11 @@ import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { utils } from './graphql/utils';
 
+//Remove
+/* 
+process.env.NODE_ENV = 'production';
+process.env.mongoURI = config.get('mongoURI'); */
+
 const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
 
