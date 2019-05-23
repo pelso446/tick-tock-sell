@@ -26,16 +26,20 @@ const httpLink = createHttpLink({
   uri: '/graphql'
 });
 
+const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/graphql`,
   options: {
-    reconnect: true
+    reconnect: true,
+    connectionParams: {
+      authToken: userToken ? userToken.token : ''
+    }
   }
 });
 
 const authLink = setContext((_, { headers }) => {
-  const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
+  //const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
   return {
     headers: {
       ...headers,

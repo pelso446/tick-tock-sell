@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation, Subscription } from 'react-apollo';
-import { Button, FormGroup, Label, Input, Form } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { authenticationService } from '../services/authentication.service';
 
 const GET_AUCTION = gql`
@@ -53,14 +52,13 @@ class AuctionPage extends Component {
     super(props);
 
     this.state = {
-      user: authenticationService.currentUserValue,
-     // bids: [{amount: '', bidder: ''}]
+      user: authenticationService.currentUserValue
+      // bids: [{amount: '', bidder: ''}]
     };
     //this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
-    let amount;
     const { user } = this.state;
     const auctionID = this.props.match.params.id;
     return (
@@ -72,7 +70,12 @@ class AuctionPage extends Component {
           return (
             <div>
               <div>
-                <Subscription subscription={BID_SUBSCRIPTION} onSubscriptionData={()=> {refetch()}}>
+                <Subscription
+                  subscription={BID_SUBSCRIPTION}
+                  onSubscriptionData={() => {
+                    refetch();
+                  }}
+                >
                   {({ data, loading }) => (
                     <h4>
                       New comment:{' '}

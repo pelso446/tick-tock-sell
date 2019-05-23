@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
@@ -47,7 +46,7 @@ class MyPage extends Component {
     const sellerID = user.user.id;
     return (
       <Query query={GET_AUCTION} variables={{ sellerID: sellerID }}>
-        {({ loading, error, data, refetch}) => {
+        {({ loading, error, data, refetch }) => {
           console.log(sellerID);
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;

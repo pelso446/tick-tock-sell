@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { Link } from 'react-router-dom';
 import { authenticationService } from '../services/authentication.service';
 import {
   Container,
@@ -11,8 +10,7 @@ import {
   FormGroup,
   Label,
   Input,
-  Button,
-  FormFeedback
+  Button
 } from 'reactstrap';
 
 const buttonStyle = {
