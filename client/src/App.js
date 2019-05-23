@@ -32,11 +32,12 @@ const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
 //process.env.PORT = 5000;
 // Create a WebSocket link:
 //"ws://localhost:5000"
+/* 
+process.env.NODE_ENV === 'production'
+? `ws://localhost:${process.env.PORT}/graphql`
+:  */
 const wsLink = new WebSocketLink({
-  uri:
-    process.env.NODE_ENV === 'production'
-      ? `ws://localhost:${process.env.PORT}/graphql`
-      : 'ws://localhost:5000/graphql',
+  uri: 'ws://localhost:5000/graphql',
   options: {
     reconnect: true
   }
