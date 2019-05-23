@@ -23,6 +23,7 @@ const ADD_AUCTION = gql`
     $title: String!
     $description: String!
     $startTime: String!
+    $duration: Int
     $items: [itemInput!]!
   ) {
     createAuction(
@@ -30,6 +31,7 @@ const ADD_AUCTION = gql`
       title: $title
       description: $description
       startTime: $startTime
+      duration: $duration
       items: $items
     ) {
       id
@@ -128,7 +130,7 @@ class AuctionForm extends Component {
   }
 
   render() {
-    let title, description, startTime;
+    let title, description, startTime, duration;
     const { user } = this.state;
     return (
       <Mutation
@@ -141,7 +143,6 @@ class AuctionForm extends Component {
             <Form
               onSubmit={e => {
                 e.preventDefault();
-                console.log(startTime.value + typeof startTime.value);
 
                 createAuction({
                   variables: {
@@ -149,6 +150,7 @@ class AuctionForm extends Component {
                     title: title.value,
                     description: description.value,
                     startTime: startTime.value,
+                    duration: parseInt(duration.value),
                     items: this.state.items
                   }
                 });
@@ -197,6 +199,21 @@ class AuctionForm extends Component {
                       startTime = node;
                     }}
                     placeholder='Starttid'
+                    min={new Date()}
+                  />
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label htmlFor='description'>Längd på auktion:</Label>
+                  <input
+                    className='form-control'
+                    type='number'
+                    name='duration'
+                    ref={node => {
+                      duration = node;
+                    }}
+                    placeholder='Sekunder'
                   />
                 </FormGroup>
               </Col>
