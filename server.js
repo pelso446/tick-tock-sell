@@ -23,8 +23,13 @@ app.use(cors());
 //Bodyparser Middleware
 app.use(express.json());
 
+const db = '';
 // DB Config
-const db = config.get('mongoURI');
+if (IN_PROD) {
+  db = process.env.mongoURI;
+} else {
+  db = config.get('mongoURI');
+}
 
 // Connect to MongoDB Atlas
 mongoose
