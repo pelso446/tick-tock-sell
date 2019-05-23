@@ -53,7 +53,8 @@ class AuctionPage extends Component {
     super(props);
 
     this.state = {
-      user: authenticationService.currentUserValue
+      user: authenticationService.currentUserValue,
+     // bids: [{amount: '', bidder: ''}]
     };
     //this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -71,7 +72,7 @@ class AuctionPage extends Component {
           return (
             <div>
               <div>
-                <Subscription subscription={BID_SUBSCRIPTION}>
+                <Subscription subscription={BID_SUBSCRIPTION} onSubscriptionData={()=> {refetch()}}>
                   {({ data, loading }) => (
                     <h4>
                       New comment:{' '}
