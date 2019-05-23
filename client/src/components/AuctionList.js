@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { authenticationService } from '../services/authentication.service';
+import Loader from './Loader';
 
 const GET_AUCTIONS = gql`
   {
@@ -55,7 +56,7 @@ class AuctionList extends Component {
     return (
       <Query pollInterval={500} query={GET_AUCTIONS}>
         {({ loading, error, data }) => {
-          if (loading || error) return 'Loading...';
+          if (loading || error) return <Loader />;
           /* if (error) return 'Loading...'; */
 
           return (

@@ -6,6 +6,7 @@ import { Query, Mutation } from 'react-apollo';
 import { Button, FormGroup, Label, Input, Form, Row, Col } from 'reactstrap';
 import { authenticationService } from '../services/authentication.service';
 import Countdown from './Countdown';
+import Loader from './Loader';
 
 const GET_AUCTION = gql`
   query GetAuction($id: ID!) {
@@ -57,7 +58,7 @@ class AuctionPage extends Component {
     return (
       <Query query={GET_AUCTION} variables={{ id: auctionID }}>
         {({ loading, error, data, refetch }) => {
-          if (loading) return 'Loading...';
+          if (loading) return <Loader />;
           if (error) return `Error! ${error.message}`;
           /* console.log('started: ' + data.auction.auctionStarted);
           console.log('finished: ' + data.auction.auctionFinished); */

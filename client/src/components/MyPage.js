@@ -6,6 +6,7 @@ import { Query, Mutation } from 'react-apollo';
 import { Button } from 'reactstrap';
 import { authenticationService } from '../services/authentication.service';
 import { Form } from 'reactstrap';
+import Loader from './Loader';
 
 const GET_AUCTION = gql`
   query getAuctions($sellerID: ID!) {
@@ -48,7 +49,7 @@ class MyPage extends Component {
     return (
       <Query query={GET_AUCTION} variables={{ sellerID: sellerID }}>
         {({ loading, error, data, refetch }) => {
-          if (loading) return 'Loading...';
+          if (loading) return <Loader />;
           if (error) return `Error! ${error.message}`;
 
           return (
