@@ -16,36 +16,40 @@ function getUserId(context) {
 
 async function scheduleAllAuctions() {
   const auctions = await Auction.find({ auctionFinished: false });
-  console.log(auctions);
+  //console.log(auctions);
   auctions.forEach(async function(auction) {
-    console.log('Auction Time ' + auction.startTime);
+    //console.log('Auction Time ' + auction.startTime);
     const time = new Date();
-    console.log('Time now ' + time);
-    console.log(auction.startTime > time);
+    /* console.log('Time now ' + time);
+    console.log(auction.startTime > time); */
     if (auction.startTime < time && !auction.auctionStarted) {
-      console.log(auction.title + 'Was reactively set as started');
+      console.log(
+        'Auction ' + auction.title + ' Was reactively set as started'
+      );
       auction.auctionStarted = true;
       await auction.save();
     }
 
     var finish = new Date(auction.startTime);
-    finish.setSeconds(start.getSeconds() + auction.duration);
+    finish.setSeconds(finish.getSeconds() + auction.duration);
     if (finish < time) {
-      console.log(auction.title + 'Was reactively set as finished');
-      auction.auctionStarted = true;
+      console.log(
+        'Auction ' + auction.title + ' Was reactively set as finished'
+      );
+      auction.auctionFinished = true;
       await auction.save();
     }
-    /* 
-    if() */
 
-    //this.scheduleJob(auction);
+    if (!auction.auctionFinished) {
+      scheduleJob(auction);
+    }
   });
 }
 
 function scheduleJob(auction) {
-  console.log(auction.startTime + ' ' + typeof auction.startTime);
+  /* console.log(auction.startTime + ' ' + typeof auction.startTime);
   console.log(new Date(auction.startTime));
-  console.log(Date.now());
+  console.log(Date.now()); */
 
   const now = new Date();
   var start = new Date(auction.startTime);
@@ -71,6 +75,8 @@ function scheduleJob(auction) {
       await tempAuction.save();
     }.bind(null, auction)
   );
+
+  console.log('Auction ' + auction.title + ' Was scheduled');
 }
 
 export const utils = {
