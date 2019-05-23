@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
+import { Query, Mutation, Subscription } from 'react-apollo';
 import { Button, FormGroup, Label, Input, Form } from 'reactstrap';
 import { authenticationService } from '../services/authentication.service';
 
@@ -39,6 +39,14 @@ const PUT_BID = gql`
   }
 `;
 
+const BID_SUBSCRIPTION = gql`
+  subscription onBidAdded {
+    bidAdded {
+      id
+    }
+  }
+`;
+
 class AuctionPage extends Component {
   constructor(props) {
     super(props);
@@ -61,6 +69,13 @@ class AuctionPage extends Component {
 
           return (
             <div>
+              <div>
+                <Subscription subscription={BID_SUBSCRIPTION}>
+                  {({ data, loading  }) => (
+                    <h4>New comment: {!loading && data.id}</h4>
+                  )}
+                </Subscription>
+              </div>
               <div className='App'>
                 <div className='container'>
                   <div className='panel panel-default'>
