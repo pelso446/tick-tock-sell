@@ -44,10 +44,10 @@ class AuctionList extends Component {
   render() {
     const { user } = this.state;
     return (
-      <Query pollInterval={500} query={GET_AUCTIONS}>
+      <Query pollInterval={5000} query={GET_AUCTIONS}>
         {({ loading, error, data }) => {
-          if (loading || error) return <Loader />;
-          /* if (error) return 'Loading...'; */
+          if (loading) return <Loader />;
+          if (error) return `Error! ${error.message}`;
 
           return (
             <div className='App'>

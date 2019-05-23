@@ -19,9 +19,8 @@ export default {
         return await Bid.find({ bidder: bidderID });
       } else {
         //console.log('not & not');
-        return await Bid.find(); 
+        return await Bid.find();
       }
-      
     },
     bid: async (root, args, context, info) => {
       return Bid.findById(args.id);
@@ -77,8 +76,8 @@ export default {
   Subscription: {
     bidAdded: {
       // Additional event labels can be passed to asyncIterator creation
-      subscribe: () => pubsub.asyncIterator([BID_ADDED]),
-    },
+      subscribe: () => pubsub.asyncIterator([BID_ADDED])
+    }
   },
 
   Bid: {
