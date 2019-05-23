@@ -136,6 +136,10 @@ class AuctionPage extends Component {
                                     <td>
                                       <Button
                                         color='success'
+                                        disabled={
+                                          data.auction.auctionFinished ||
+                                          !data.auction.auctionStarted
+                                        }
                                         onClick={() =>
                                           PutBid({
                                             variables: {
@@ -154,6 +158,10 @@ class AuctionPage extends Component {
                                     <td>
                                       <Button
                                         color='primary'
+                                        disabled={
+                                          data.auction.auctionFinished ||
+                                          !data.auction.auctionStarted
+                                        }
                                         onClick={() =>
                                           PutBid({
                                             variables: {
@@ -172,6 +180,10 @@ class AuctionPage extends Component {
                                     <td>
                                       <Button
                                         color='danger'
+                                        disabled={
+                                          data.auction.auctionFinished ||
+                                          !data.auction.auctionStarted
+                                        }
                                         onClick={() =>
                                           PutBid({
                                             variables: {
