@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
-import { Button, FormGroup, Label, Input, Form, Row, Col } from 'reactstrap';
+import { Query, Mutation, Subscription } from 'react-apollo';
+import { Button, Row, Col } from 'reactstrap';
 import { authenticationService } from '../services/authentication.service';
 import Countdown from './Countdown';
 import Loader from './Loader';
@@ -44,11 +43,21 @@ const PUT_BID = gql`
   }
 `;
 
+const BID_SUBSCRIPTION = gql`
+  subscription {
+    bidAdded {
+      id
+      amount
+    }
+  }
+`;
+
 class AuctionPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       user: authenticationService.currentUserValue
+      // bids: [{amount: '', bidder: ''}]
     };
   }
 
@@ -67,6 +76,23 @@ class AuctionPage extends Component {
           /* console.log(finish.toISOString()); */
           return (
             <div>
+              <div>
+                <Subscription
+                  subscription={BID_SUBSCRIPTION}
+                  onSubscriptionData={() => {
+                    refetch();
+                  }}
+                >
+                  {({ data, loading }) => (
+                    <h4>
+                      New comment:{' '}
+                      {!loading && data.bidAdded
+                        ? data.bidAdded.amount
+                        : 'tomt'}
+                    </h4>
+                  )}
+                </Subscription>
+              </div>
               <div className='App'>
                 <div className='container'>
                   <div className='panel panel-default'>

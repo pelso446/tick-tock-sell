@@ -10,7 +10,6 @@ import {
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { AUTH_TOKEN } from '../constants';
 import { authenticationService } from '../services/authentication.service';
 
 const REGISTER_MUTATION = gql`
