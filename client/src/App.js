@@ -31,8 +31,12 @@ const httpLink = createHttpLink({
 const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
 
 // Create a WebSocket link:
+//"ws://localhost:5000"
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:5000/graphql`,
+  uri:
+    process.env.NODE_ENV === 'production'
+      ? '/graphql'
+      : 'ws://localhost:5000/graphql',
   options: {
     reconnect: true
   }

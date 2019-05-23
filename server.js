@@ -23,8 +23,8 @@ app.use(cors());
 //Bodyparser Middleware
 app.use(express.json());
 
-let db = '';
 // DB Config
+let db = '';
 if (IN_PROD) {
   db = process.env.mongoURI;
 } else {
