@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { authenticationService } from '../services/authentication.service';
+import Loader from './Loader';
 
 const GET_AUCTIONS = gql`
   {
@@ -18,6 +19,20 @@ const GET_AUCTIONS = gql`
   }
 `;
 
+function Time(props) {
+  const time = new Date(parseInt(props.timestamp));
+  return (
+    <div>
+      {time
+        .toLocaleTimeString()
+        .toString()
+        .substr(0, 5) +
+        ', ' +
+        time.toLocaleDateString().toString()}
+    </div>
+  );
+}
+
 class AuctionList extends Component {
   constructor(props) {
     super(props);
@@ -26,23 +41,13 @@ class AuctionList extends Component {
     };
   }
 
-  /*   componentDidMount() {
-    authenticationService.currentUser.subscribe(x =>
-      this.setState({ user: x })
-    );
-  }
-
-  componentWillUnmount() {
-    authenticationService.currentUser.
-  } */
-
   render() {
     const { user } = this.state;
     return (
-      <Query pollInterval={500} query={GET_AUCTIONS}>
+      <Query pollInterval={5000} query={GET_AUCTIONS}>
         {({ loading, error, data }) => {
-          if (loading || error) return 'Loading...';
-          /* if (error) return 'Loading...'; */
+          if (loading) return <Loader />;
+          if (error) return `Error! ${error.message}`;
 
           return (
             <div className='App'>
@@ -78,7 +83,9 @@ class AuctionList extends Component {
                               </Link>
                             </td>
                             <td>{auction.description}</td>
-                            <td>{auction.startTime}</td>
+                            <td>
+                              <Time timestamp={auction.startTime} />
+                            </td>
                             <td>{auction.seller.name}</td>
                           </tr>
                         ))}

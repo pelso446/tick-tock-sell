@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { Link } from 'react-router-dom';
 import { authenticationService } from '../services/authentication.service';
 import {
   Container,
@@ -11,8 +10,7 @@ import {
   FormGroup,
   Label,
   Input,
-  Button,
-  FormFeedback
+  Button
 } from 'reactstrap';
 
 const buttonStyle = {
@@ -25,6 +23,7 @@ const ADD_AUCTION = gql`
     $title: String!
     $description: String!
     $startTime: String!
+    $duration: Int
     $items: [itemInput!]!
   ) {
     createAuction(
@@ -32,6 +31,7 @@ const ADD_AUCTION = gql`
       title: $title
       description: $description
       startTime: $startTime
+      duration: $duration
       items: $items
     ) {
       id
@@ -88,8 +88,8 @@ class AuctionForm extends Component {
               <Input
                 placeholder='Pris'
                 name='itemPrice'
-                pattern='[0-9]*'
-                value={parseInt(el.itemPrice) || ''}
+                /* pattern='[0-9]*' */
+                value={el.itemPrice || ''}
                 onChange={this.handleChange.bind(this, i)}
               />
             </FormGroup>
@@ -130,7 +130,7 @@ class AuctionForm extends Component {
   }
 
   render() {
-    let title, description, startTime;
+    let title, description, startTime, duration;
     const { user } = this.state;
     return (
       <Mutation
@@ -143,13 +143,6 @@ class AuctionForm extends Component {
             <Form
               onSubmit={e => {
                 e.preventDefault();
-                console.log(
-                  user.user.id,
-                  title.value,
-                  description.value,
-                  startTime.value,
-                  this.state.items
-                );
 
                 createAuction({
                   variables: {
@@ -157,6 +150,7 @@ class AuctionForm extends Component {
                     title: title.value,
                     description: description.value,
                     startTime: startTime.value,
+                    duration: parseInt(duration.value),
                     items: this.state.items
                   }
                 });
@@ -198,13 +192,28 @@ class AuctionForm extends Component {
                 <FormGroup>
                   <Label htmlFor='start_time'>Starttid</Label>
                   <input
-                    type='text'
+                    type='datetime-local'
                     className='form-control'
                     name='start_time'
                     ref={node => {
                       startTime = node;
                     }}
                     placeholder='Starttid'
+                    min={new Date()}
+                  />
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label htmlFor='description'>Längd på auktion:</Label>
+                  <input
+                    className='form-control'
+                    type='number'
+                    name='duration'
+                    ref={node => {
+                      duration = node;
+                    }}
+                    placeholder='Sekunder'
                   />
                 </FormGroup>
               </Col>

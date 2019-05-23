@@ -1,5 +1,7 @@
 import { Item, User, Bid } from '../../models';
-import { UserInputError } from 'apollo-server-express';
+import { UserInputError, PubSub } from 'apollo-server-express';
+const BID_ADDED = 'BID_ADDED';
+const pubsub = new PubSub();
 
 export default {
   Query: {
@@ -66,10 +68,18 @@ export default {
 
       item.highestBid = bid._id;
       await item.save();
-
+      pubsub.publish(BID_ADDED, { bidAdded: bid });
       return bid;
     }
   },
+
+  Subscription: {
+    bidAdded: {
+      // Additional event labels can be passed to asyncIterator creation
+      subscribe: () => pubsub.asyncIterator([BID_ADDED])
+    }
+  },
+
   Bid: {
     //Use populate
     item: async (bid, args, context, info) => {

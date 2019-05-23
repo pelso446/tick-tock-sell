@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
+import Loader from './Loader';
 
 const GET_AUCTION = gql`
   query auction($auctionId: String) {
@@ -46,7 +47,7 @@ class EditAuction extends Component {
         variables={{ auctionId: this.props.match.params.id }}
       >
         {({ loading, error, data }) => {
-          if (loading) return 'Loading...';
+          if (loading) return <Loader />;
           if (error) return `Error! ${error.message}`;
 
           return (

@@ -7,7 +7,12 @@ import config from 'config';
 import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 //import expressGraphQL from 'express-graphql';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, PubSub } from 'apollo-server-express';
+import { execute, subscribe } from 'graphql';
+import { createServer } from 'http';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+import { utils } from './graphql/utils';
 
 const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
@@ -54,8 +59,22 @@ if (IN_PROD) {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
+
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () =>
-  console.log(`Server started on http://localhost:${PORT}${server.graphqlPath}`)
-);
+const httpServer = createServer(app);
+server.installSubscriptionHandlers(httpServer);
+
+httpServer.listen({ port: PORT }, () => {
+  console.log(
+    `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+  );
+  console.log(
+    `🚀 Subscriptions ready at ws://localhost:${PORT}${
+      server.subscriptionsPath
+    }`
+  );
+});
+
+// Start all scheduled jobs
+utils.scheduleAllAuctions();
