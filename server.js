@@ -36,14 +36,6 @@ mongoose
   .then(() => console.log('MongoDB Connected... '))
   .catch(err => console.log(err));
 
-/* app.use(
-  '/graphql',
-  expressGraphQL({
-    schema,
-    graphiql: true
-  })
-); */
-
 const server = new ApolloServer({
   typeDefs,
   resolvers,
