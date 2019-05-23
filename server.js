@@ -58,7 +58,7 @@ const server = new ApolloServer({
 server.applyMiddleware({ app, cors: false });
 
 if (IN_PROD) {
-  app.use(express.static('public'));
+  app.use(express.static('client/build'));
 
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
