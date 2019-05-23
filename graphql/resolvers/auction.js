@@ -1,6 +1,6 @@
 import { Auction, Item, User } from '../../models';
 import { AuthenticationError } from 'apollo-server-express';
-import schedule from 'node-schedule';
+import { utils } from '../utils';
 
 export default {
   Query: {
@@ -51,25 +51,7 @@ export default {
         });
       }
 
-      console.log(startTime + ' ' + typeof startTime);
-      console.log(new Date(startTime));
-      console.log(Date.now());
-
-      var start = new Date(startTime);
-      var finish = new Date(startTime);
-      finish.setSeconds(start.getSeconds() + auction.duration);
-
-      var startAuction = schedule
-        .scheduleJob(start, function(tempID) {
-          const id = auction;
-        })
-        .bind(null, auction._id);
-
-      var finishAuction = schedule
-        .scheduleJob(finish, function(tempID) {
-          console.log('Job has finished');
-        })
-        .bind(null, auction._id);
+      utils.scheduleJob(auction);
 
       return auction;
     },
