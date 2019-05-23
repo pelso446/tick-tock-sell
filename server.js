@@ -42,7 +42,6 @@ mongoose
     graphiql: true
   })
 ); */
-const pubsub = new PubSub();
 
 const server = new ApolloServer({
   typeDefs,
@@ -65,7 +64,13 @@ const PORT = process.env.PORT || 5000;
 const httpServer = createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
-httpServer.listen({ port: PORT }, () =>{
-  console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
-  console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`)
-})
+httpServer.listen({ port: PORT }, () => {
+  console.log(
+    `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+  );
+  console.log(
+    `🚀 Subscriptions ready at ws://localhost:${PORT}${
+      server.subscriptionsPath
+    }`
+  );
+});

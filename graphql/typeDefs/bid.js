@@ -19,6 +19,6 @@ export default gql`
   }
 
   extend type Subscription{
-    bidAdded: Bid!
+    bidAdded: Bid
   }
 `;

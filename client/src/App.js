@@ -5,7 +5,9 @@ import { ApolloProvider } from 'react-apollo';
 import { setContext } from 'apollo-link-context';
 import { createHttpLink } from 'apollo-link-http';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-
+import { split } from 'apollo-link';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
 import { AUTH_TOKEN } from './constants';
 import {
   AuctionList,
@@ -23,6 +25,14 @@ const httpLink = createHttpLink({
   uri: '/graphql'
 });
 
+// Create a WebSocket link:
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:5000/graphql`,
+  options: {
+    reconnect: true
+  }
+});
+
 const authLink = setContext((_, { headers }) => {
   const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
   return {
@@ -33,8 +43,21 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  authLink.concat(httpLink)
+);
+
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link,
   cache: new InMemoryCache()
 });
 

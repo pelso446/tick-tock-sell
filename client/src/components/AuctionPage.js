@@ -40,7 +40,7 @@ const PUT_BID = gql`
 `;
 
 const BID_SUBSCRIPTION = gql`
-  subscription onBidAdded {
+  subscription{
     bidAdded {
       id
     }
@@ -72,7 +72,7 @@ class AuctionPage extends Component {
               <div>
                 <Subscription subscription={BID_SUBSCRIPTION}>
                   {({ data, loading  }) => (
-                    <h4>New comment: {!loading && data.id}</h4>
+                    <h4>New comment: {!loading && data.bidAdded ? data.bidAdded.id : 'tomt'}</h4>
                   )}
                 </Subscription>
               </div>
