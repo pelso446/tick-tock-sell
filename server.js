@@ -12,6 +12,7 @@ import { execute, subscribe } from 'graphql';
 import { createServer } from 'http';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+import { utils } from './graphql/utils';
 
 const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
@@ -74,3 +75,6 @@ httpServer.listen({ port: PORT }, () => {
     }`
   );
 });
+
+// Start all scheduled jobs
+utils.scheduleAllAuctions();

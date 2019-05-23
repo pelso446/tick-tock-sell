@@ -1,7 +1,7 @@
 import { User, Auction } from '../../models';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { APP_SECRET, getUserId } from '../utils';
+import { sign } from 'jsonwebtoken';
+import { utils } from '../utils';
 
 export default {
   Query: {
@@ -22,7 +22,7 @@ export default {
         password
       });
 
-      const token = jwt.sign({ userId: user._id }, APP_SECRET);
+      const token = sign({ userId: user._id }, utils.APP_SECRET);
       return { token, user };
     },
     signIn: async (root, args, { req }, info) => {
@@ -35,7 +35,7 @@ export default {
       if (!valid) {
         throw new Error('Invalid password');
       }
-      const token = jwt.sign({ userId: user._id }, APP_SECRET);
+      const token = sign({ userId: user._id }, utils.APP_SECRET);
       return { token, user };
     }
   },
