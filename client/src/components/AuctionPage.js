@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
-import { Button, FormGroup, Label, Input, Form } from 'reactstrap';
+import { Button, FormGroup, Label, Input, Form, Row, Col } from 'reactstrap';
 import { authenticationService } from '../services/authentication.service';
+import Countdown from './Countdown';
 
 const GET_AUCTION = gql`
   query GetAuction($id: ID!) {
@@ -14,6 +15,8 @@ const GET_AUCTION = gql`
       description
       startTime
       duration
+      auctionStarted
+      auctionFinished
       items {
         id
         title
@@ -43,15 +46,13 @@ const PUT_BID = gql`
 class AuctionPage extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       user: authenticationService.currentUserValue
     };
-    //this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
-    let amount;
+    const countDown = this.state;
     const { user } = this.state;
     const auctionID = this.props.match.params.id;
     return (
@@ -59,15 +60,43 @@ class AuctionPage extends Component {
         {({ loading, error, data, refetch }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
+          console.log('started: ' + data.auction.auctionStarted);
+          console.log('finished: ' + data.auction.auctionFinished);
+          var finish = new Date(parseInt(data.auction.startTime));
+          finish.setSeconds(finish.getSeconds() + data.auction.duration);
+          console.log(finish.toISOString());
 
           return (
             <div>
               <div className='App'>
                 <div className='container'>
                   <div className='panel panel-default'>
-                    <div className='panel-heading'>
-                      <h3 className='panel-title'>{data.auction.title}</h3>
-                    </div>
+                    <Row className='panel-heading'>
+                      <Col>
+                        <h3 className='panel-title'>{data.auction.title}</h3>
+                      </Col>
+                      <Col>
+                        <h2 style={{ textAlign: 'end' }}>
+                          {!data.auction.auctionStarted ? (
+                            <div>
+                              Tid kvar till auktion:
+                              <Countdown
+                                date={new Date(
+                                  parseInt(data.auction.startTime)
+                                ).toISOString()}
+                              />
+                            </div>
+                          ) : !data.auction.auctionFinished ? (
+                            <div>
+                              Tid kvar på auktion:
+                              <Countdown date={finish.toISOString()} />
+                            </div>
+                          ) : (
+                            'Auktion avslutad'
+                          )}
+                        </h2>
+                      </Col>
+                    </Row>
                     <div className='panel-body'>
                       <table className='table table-stripe'>
                         <thead>
