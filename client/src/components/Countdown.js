@@ -36,7 +36,12 @@ class Countdown extends Component {
     let diff = (Date.parse(new Date(endDate)) - Date.parse(new Date())) / 1000;
 
     // clear countdown when date is reached
-    if (diff <= 0) return false;
+    if (diff <= 0) {
+      setTimeout(() => {
+        this.props.refetch();
+        return false;
+      }, 1000);
+    }
 
     const timeLeft = {
       years: 0,

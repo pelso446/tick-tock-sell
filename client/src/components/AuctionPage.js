@@ -52,7 +52,6 @@ class AuctionPage extends Component {
   }
 
   render() {
-    const countDown = this.state;
     const { user } = this.state;
     const auctionID = this.props.match.params.id;
     return (
@@ -60,12 +59,11 @@ class AuctionPage extends Component {
         {({ loading, error, data, refetch }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
-          console.log('started: ' + data.auction.auctionStarted);
-          console.log('finished: ' + data.auction.auctionFinished);
+          /* console.log('started: ' + data.auction.auctionStarted);
+          console.log('finished: ' + data.auction.auctionFinished); */
           var finish = new Date(parseInt(data.auction.startTime));
           finish.setSeconds(finish.getSeconds() + data.auction.duration);
-          console.log(finish.toISOString());
-
+          /* console.log(finish.toISOString()); */
           return (
             <div>
               <div className='App'>
@@ -84,12 +82,16 @@ class AuctionPage extends Component {
                                 date={new Date(
                                   parseInt(data.auction.startTime)
                                 ).toISOString()}
+                                refetch={() => refetch()}
                               />
                             </div>
                           ) : !data.auction.auctionFinished ? (
                             <div>
                               Tid kvar på auktion:
-                              <Countdown date={finish.toISOString()} />
+                              <Countdown
+                                date={finish.toISOString()}
+                                refetch={() => refetch()}
+                              />
                             </div>
                           ) : (
                             'Auktion avslutad'
