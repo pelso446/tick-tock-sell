@@ -17,7 +17,7 @@ export default {
   },
   Mutation: {
     createAuction: async (root, args, { req }, info) => {
-      const { sellerID, title, description, startTime, items } = args;
+      const { sellerID, title, description, startTime, duration, items } = args;
       const validationErrors = {};
       User.findById(sellerID, function(err, res) {
         if (err) {
@@ -36,7 +36,8 @@ export default {
         seller: sellerID,
         title,
         description,
-        startTime
+        startTime,
+        duration
       });
 
       if (items) {

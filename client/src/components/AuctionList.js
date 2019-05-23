@@ -19,11 +19,7 @@ const GET_AUCTIONS = gql`
 `;
 
 function Time(props) {
-  console.log(props.timestamp);
-  console.log(typeof props.timestamp);
   const time = new Date(parseInt(props.timestamp));
-  console.log(time.toLocaleTimeString());
-
   return (
     <div>
       {time

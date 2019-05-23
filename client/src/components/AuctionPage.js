@@ -13,6 +13,7 @@ const GET_AUCTION = gql`
       title
       description
       startTime
+      duration
       items {
         id
         title
