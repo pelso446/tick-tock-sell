@@ -35,6 +35,20 @@ const DELETE_AUCTION = gql`
   }
 `;
 
+function Time(props) {
+  const time = new Date(parseInt(props.timestamp));
+  return (
+    <div>
+      {time
+        .toLocaleTimeString()
+        .toString()
+        .substr(0, 5) +
+        ', ' +
+        time.toLocaleDateString().toString()}
+    </div>
+  );
+}
+
 class MyPage extends Component {
   constructor(props) {
     super(props);
@@ -66,9 +80,9 @@ class MyPage extends Component {
                           <table className='table table-stripe'>
                             <thead>
                               <tr>
-                                <th>Title</th>
-                                <th>Description</th>
-                                <th>Start Time</th>
+                                <th>Titel</th>
+                                <th>Beskrivning</th>
+                                <th>Starttid</th>
                                 <th />
                                 <th />
                                 <th />
@@ -79,7 +93,9 @@ class MyPage extends Component {
                                 <tr key={index}>
                                   <td>{auction.title}</td>
                                   <td>{auction.description}</td>
-                                  <td>{auction.startTime}</td>
+                                  <td>
+                                    <Time timestamp={auction.startTime} />
+                                  </td>
                                   <td>{auction.seller.name}</td>
                                   <td>
                                     <Button
