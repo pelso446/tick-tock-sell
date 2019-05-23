@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
 import { setContext } from 'apollo-link-context';
 import { createHttpLink } from 'apollo-link-http';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { split } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { AUTH_TOKEN } from './constants';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import {
   AuctionList,
   AuctionForm,
