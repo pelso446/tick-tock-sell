@@ -70,8 +70,7 @@ if (IN_PROD) {
   });
 }
 
-//process.env.PORT ||
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 const httpServer = createServer(app);
 server.installSubscriptionHandlers(httpServer);

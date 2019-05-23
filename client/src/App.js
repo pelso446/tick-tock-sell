@@ -36,6 +36,9 @@ const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
 process.env.NODE_ENV === 'production'
 ? `ws://localhost:${process.env.PORT}/graphql`
 :  */
+//var host = location.origin.replace(/^http/, 'ws');
+//console.log(host);
+
 const wsLink = new WebSocketLink({
   uri: 'ws://localhost:5000/graphql',
   options: {
