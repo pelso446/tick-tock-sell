@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { authenticationService } from '../services/authentication.service';
+import Loader from './Loader';
 
 const GET_AUCTIONS = gql`
   {
@@ -17,6 +18,20 @@ const GET_AUCTIONS = gql`
     }
   }
 `;
+
+function Time(props) {
+  const time = new Date(parseInt(props.timestamp));
+  return (
+    <div>
+      {time
+        .toLocaleTimeString()
+        .toString()
+        .substr(0, 5) +
+        ', ' +
+        time.toLocaleDateString().toString()}
+    </div>
+  );
+}
 
 class AuctionList extends Component {
   constructor(props) {
@@ -41,7 +56,7 @@ class AuctionList extends Component {
     return (
       <Query pollInterval={500} query={GET_AUCTIONS}>
         {({ loading, error, data }) => {
-          if (loading || error) return 'Loading...';
+          if (loading || error) return <Loader />;
           /* if (error) return 'Loading...'; */
 
           return (
@@ -78,7 +93,9 @@ class AuctionList extends Component {
                               </Link>
                             </td>
                             <td>{auction.description}</td>
-                            <td>{auction.startTime}</td>
+                            <td>
+                              <Time timestamp={auction.startTime} />
+                            </td>
                             <td>{auction.seller.name}</td>
                           </tr>
                         ))}

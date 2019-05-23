@@ -11,6 +11,7 @@ export default gql`
       title: String!
       description: String
       startTime: String!
+      duration: Int
       items: [itemInput]
     ): Auction
     joinAuction(auctionID: ID!, bidderID: ID!): Auction
@@ -25,6 +26,9 @@ export default gql`
     description: String!
     items: [Item!]!
     startTime: String!
+    duration: Int!
+    auctionStarted: Boolean!
+    auctionFinished: Boolean!
     createdAt: String!
     updatedAt: String!
   }

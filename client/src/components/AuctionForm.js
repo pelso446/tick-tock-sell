@@ -88,8 +88,8 @@ class AuctionForm extends Component {
               <Input
                 placeholder='Pris'
                 name='itemPrice'
-                pattern='[0-9]*'
-                value={parseInt(el.itemPrice) || ''}
+                /* pattern='[0-9]*' */
+                value={el.itemPrice || ''}
                 onChange={this.handleChange.bind(this, i)}
               />
             </FormGroup>
@@ -143,13 +143,7 @@ class AuctionForm extends Component {
             <Form
               onSubmit={e => {
                 e.preventDefault();
-                console.log(
-                  user.user.id,
-                  title.value,
-                  description.value,
-                  startTime.value,
-                  this.state.items
-                );
+                console.log(startTime.value + typeof startTime.value);
 
                 createAuction({
                   variables: {
@@ -198,7 +192,7 @@ class AuctionForm extends Component {
                 <FormGroup>
                   <Label htmlFor='start_time'>Starttid</Label>
                   <input
-                    type='text'
+                    type='datetime-local'
                     className='form-control'
                     name='start_time'
                     ref={node => {

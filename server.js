@@ -8,6 +8,7 @@ import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 //import expressGraphQL from 'express-graphql';
 import { ApolloServer } from 'apollo-server-express';
+import { utils } from './graphql/utils';
 
 const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
@@ -59,3 +60,6 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
   console.log(`Server started on http://localhost:${PORT}${server.graphqlPath}`)
 );
+
+// Start all scheduled jobs
+utils.scheduleAllAuctions();

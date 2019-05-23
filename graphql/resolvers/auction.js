@@ -1,5 +1,6 @@
 import { Auction, Item, User } from '../../models';
 import { AuthenticationError } from 'apollo-server-express';
+import { utils } from '../utils';
 
 export default {
   Query: {
@@ -16,7 +17,7 @@ export default {
   },
   Mutation: {
     createAuction: async (root, args, { req }, info) => {
-      const { sellerID, title, description, startTime, items } = args;
+      const { sellerID, title, description, startTime, duration, items } = args;
       const validationErrors = {};
       User.findById(sellerID, function(err, res) {
         if (err) {
@@ -35,7 +36,8 @@ export default {
         seller: sellerID,
         title,
         description,
-        startTime
+        startTime,
+        duration
       });
 
       if (items) {
@@ -49,6 +51,8 @@ export default {
           });
         });
       }
+
+      utils.scheduleJob(auction);
 
       return auction;
     },
@@ -111,7 +115,6 @@ export default {
             { validationErrors }
           );
         } else {
-          console.log(res);
           return res;
         }
       });
