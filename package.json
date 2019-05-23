@@ -17,6 +17,7 @@
   "author": "Erik Ståhl",
   "license": "ISC",
   "dependencies": {
+    "@babel/node": "^7.2.2",
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
@@ -39,7 +40,6 @@
     "node-schedule": "^1.3.2"
   },
   "devDependencies": {
-    "@babel/node": "^7.2.2",
     "nodemon": "^1.18.10"
   }
 }
