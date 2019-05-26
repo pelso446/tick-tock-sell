@@ -14,6 +14,11 @@ import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { utils } from './graphql/utils';
 
+//Remove
+/* 
+process.env.NODE_ENV = 'production';
+process.env.mongoURI = config.get('mongoURI'); */
+
 const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
 
@@ -24,7 +29,12 @@ app.use(cors());
 app.use(express.json());
 
 // DB Config
-const db = config.get('mongoURI');
+let db = '';
+if (IN_PROD) {
+  db = process.env.mongoURI;
+} else {
+  db = config.get('mongoURI');
+}
 
 // Connect to MongoDB Atlas
 mongoose
@@ -45,7 +55,7 @@ const server = new ApolloServer({
 server.applyMiddleware({ app, cors: false });
 
 if (IN_PROD) {
-  app.use(express.static('public'));
+  app.use(express.static('client/build'));
 
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));

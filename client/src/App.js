@@ -24,16 +24,34 @@ import {
 } from './components';
 import { authenticationService } from './services/authentication.service';
 
+let wsUrl = '';
+let httpUrl = '';
+if (window.location.host === 'localhost:3000') {
+  httpUrl = 'http://localhost:5000/graphql';
+  wsUrl = 'ws://localhost:5000/graphql';
+} else {
+  httpUrl = `https://${window.location.host}/graphql`;
+  wsUrl = `wss://${window.location.host}/graphql`;
+}
+
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: httpUrl,
   fetch
 });
 
 const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
-
+//process.env.PORT = 5000;
 // Create a WebSocket link:
+//"ws://localhost:5000"
+/* 
+process.env.NODE_ENV === 'production'
+? `ws://localhost:${process.env.PORT}/graphql`
+:  */
+//var host = location.origin.replace(/^http/, 'ws');
+console.log('location: ' + window.location.host);
+
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:5000/graphql`,
+  uri: wsUrl,
   options: {
     reconnect: true
   }
