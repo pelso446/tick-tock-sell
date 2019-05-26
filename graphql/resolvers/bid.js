@@ -1,5 +1,6 @@
-import { Item, User, Bid } from '../../models';
+import { Item, User, Bid, Auction } from '../../models';
 import { UserInputError, PubSub } from 'apollo-server-express';
+import user from './user';
 const BID_ADDED = 'BID_ADDED';
 const pubsub = new PubSub();
 
@@ -40,6 +41,11 @@ export default {
       if (!item) {
         validationErrors.item = 'Item not found';
       } else {
+        console.log(item.auction.auctionStarted);
+        if(item.auction.auctionStarted == false || item.auction.auctionFinished == true ){
+          validationErrors.auction = 'Auction not active';
+        }else{
+          console.log("hej")
         if (item.auction) {
           if (item.auction.seller == bidderID) {
             validationErrors.badBidder =
@@ -49,9 +55,13 @@ export default {
             if (item.highestBid.amount >= amount) {
               validationErrors.amount = 'Higher bid already exists';
             }
+            if (item.highestBid.bidder == bidderID) {
+              validationErrors.badBid = 'Current user has the latest bid';
+            }
           }
         }
       }
+    }
 
       if (Object.keys(validationErrors).length > 0) {
         throw new UserInputError(

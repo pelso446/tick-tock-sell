@@ -94,29 +94,14 @@ class AuctionPage extends Component {
           /* console.log(finish.toISOString()); */
           return (
             <div>
-              <div>
-                <Subscription
-                  subscription={BID_SUBSCRIPTION}
-                  onSubscriptionData={() => {
-                    refetch();
-                  }}
-                >
-                  {({ data, loading }) => (
-                    <h4>
-                      New comment:{' '}
-                      {!loading && data.bidAdded
-                        ? data.bidAdded.amount
-                        : 'tomt'}
-                    </h4>
-                  )}
-                </Subscription>
-              </div>
               <div className='App'>
                 <div className='container'>
                   <div className='panel panel-default'>
                     <Row className='panel-heading'>
                       <Col>
                         <h3 className='panel-title'>{data.auction.title}</h3>
+                        <h5 className='panel-title'>{data.auction.description}</h5>
+
                       </Col>
                       <Col>
                         <h2 style={{ textAlign: 'end' }}>
