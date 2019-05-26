@@ -19,6 +19,7 @@ import {
   Header,
   Register,
   MyPage,
+  MyAuctions,
   EditAuction
 } from './components';
 import { authenticationService } from './services/authentication.service';
@@ -104,6 +105,7 @@ class App extends Component {
             <Route path='/login' component={Login} />
             <Route path='/mypage' component={MyPage} />
             <Route path='/register' component={Register} />
+            <Route path='/myauctions/:id' component={MyAuctions} />
           </div>
         </Router>
       </ApolloProvider>
