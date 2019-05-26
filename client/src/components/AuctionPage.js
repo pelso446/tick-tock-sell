@@ -25,6 +25,7 @@ const GET_AUCTION = gql`
         highestBid {
           amount
           bidder {
+            id
             name
           }
         }
@@ -59,6 +60,23 @@ class AuctionPage extends Component {
       user: authenticationService.currentUserValue
       // bids: [{amount: '', bidder: ''}]
     };
+  }
+
+  changeStyle(bidder, currentUser) {
+    console.log('innan' + bidder);
+    if (bidder == null) {
+    } else {
+      console.log('efter' + bidder);
+      if (bidder.bidder.id === currentUser) {
+        return {
+          color: 'green'
+        };
+      } else {
+        return {
+          color: 'red'
+        };
+      }
+    }
   }
 
   render() {
@@ -149,12 +167,22 @@ class AuctionPage extends Component {
                                     <td>{item.title}</td>
                                     <td>{item.description}</td>
                                     <td>{item.price}</td>
-                                    <td>
+                                    <td
+                                      style={this.changeStyle(
+                                        item.highestBid,
+                                        user.user.id
+                                      )}
+                                    >
                                       {item.highestBid
                                         ? item.highestBid.amount
                                         : 'Inget bud har lagts'}
                                     </td>
-                                    <td>
+                                    <td
+                                      style={this.changeStyle(
+                                        item.highestBid,
+                                        user.user.id
+                                      )}
+                                    >
                                       {item.highestBid
                                         ? item.highestBid.bidder.name
                                         : 'Inget bud har lagts'}
