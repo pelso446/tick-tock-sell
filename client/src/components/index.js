@@ -6,3 +6,5 @@ export { default as Login } from './Login';
 export { default as Register } from './Register';
 export { default as MyPage } from './MyPage';
 export { default as EditAuction } from './EditAuction';
+export { default as MyAuctions } from './MyAuctions';
+

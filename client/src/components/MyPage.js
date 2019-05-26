@@ -6,11 +6,13 @@ import { Button } from 'reactstrap';
 import { authenticationService } from '../services/authentication.service';
 import { Form } from 'reactstrap';
 import Loader from './Loader';
+import { Link } from 'react-router-dom';
 
 const GET_AUCTION = gql`
   query getAuctions($sellerID: ID!) {
     auctions(sellerID: $sellerID) {
       id
+      auctionFinished
       seller {
         id
       }
@@ -87,31 +89,51 @@ class MyPage extends Component {
                                 <th />
                               </tr>
                             </thead>
-                            <tbody>
-                              {data.auctions.map((auction, index) => (
-                                <tr key={index}>
-                                  <td>{auction.title}</td>
-                                  <td>{auction.description}</td>
-                                  <td>
-                                    <Time timestamp={auction.startTime} />
-                                  </td>
-                                  <td>{auction.seller.name}</td>
-                                  <td>
-                                    <Button
-                                      onClick={() =>
-                                        deleteAuction({
-                                          variables: {
-                                            auctionID: auction.id
-                                          }
-                                        }).then(() => refetch())
-                                      }
-                                    >
-                                      Ta bort
-                                    </Button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
+
+                            {data.auctions.map((auction, index) => (
+                              <tbody>
+                                {!auction.auctionFinished ? (
+                                  <tr>
+                                    <td>{auction.title}</td>
+                                    <td>{auction.description}</td>
+                                    <td>
+                                      <Time timestamp={auction.startTime} />
+                                    </td>
+                                    <td>{auction.seller.name}</td>
+                                    <td>
+                                      <Button
+                                        color='danger'
+                                        onClick={() =>
+                                          deleteAuction({
+                                            variables: {
+                                              auctionID: auction.id
+                                            }
+                                          }).then(() => refetch())
+                                        }
+                                      >
+                                        Ta bort auktion
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ) : auction.auctionFinished ? (
+                                  <tr>
+                                    <td>{auction.title}</td>
+                                    <td>{auction.description}</td>
+                                    <td>
+                                      <Time timestamp={auction.startTime} />
+                                    </td>
+                                    <td>{auction.seller.name}</td>
+                                    <td>
+                                        <Link to={`/myauctions/${auction.id}`}>
+                                      <Button color='info'>Visa avslutad auktion</Button>
+                                      </Link>
+                                    </td>
+                                  </tr>
+                                ) : (
+                                  ''
+                                )}
+                              </tbody>
+                            ))}
                           </table>
                           <div> </div>
                         </div>
