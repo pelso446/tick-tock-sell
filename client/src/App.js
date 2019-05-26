@@ -29,8 +29,8 @@ if (window.location.host === 'localhost:3000') {
   httpUrl = 'http://localhost:5000/graphql';
   wsUrl = 'ws://localhost:5000/graphql';
 } else {
-  httpUrl = `http://${window.location.host}/graphql`;
-  wsUrl = `ws://${window.location.host}/graphql`;
+  httpUrl = `https://${window.location.host}/graphql`;
+  wsUrl = `wss://${window.location.host}/graphql`;
 }
 
 const httpLink = createHttpLink({
