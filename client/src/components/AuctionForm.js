@@ -112,8 +112,7 @@ class AuctionForm extends Component {
 
     items[i] = {
       ...items[i],
-      [name]:
-        name === 'itemPrice' || name === 'duration' ? parseInt(value) : value
+      [name]: name === 'itemPrice' ? parseInt(value) : value
     };
     this.setState({ items });
   }

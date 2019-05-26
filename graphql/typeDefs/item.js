@@ -12,7 +12,6 @@ export default gql`
       title: String!
       description: String
       price: Int
-      duration: Int
     ): Item
   }
 
@@ -24,7 +23,6 @@ export default gql`
     title: String!
     description: String
     price: Int!
-    duration: Int!
     createdAt: String!
     updatedAt: String!
   }
