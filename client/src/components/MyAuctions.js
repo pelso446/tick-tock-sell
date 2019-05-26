@@ -34,31 +34,11 @@ const GET_AUCTION = gql`
   }
 `;
 
-const PUT_BID = gql`
-  mutation putBid($itemID: ID!, $bidderID: ID!, $amount: Int!) {
-    putBid(itemID: $itemID, bidderID: $bidderID, amount: $amount) {
-      item {
-        title
-      }
-    }
-  }
-`;
-
-const BID_SUBSCRIPTION = gql`
-  subscription {
-    bidAdded {
-      id
-      amount
-    }
-  }
-`;
-
-class AuctionPage extends Component {
+class MyAuctions extends Component {
   constructor(props) {
     super(props);
     this.state = {
       user: authenticationService.currentUserValue
-      // bids: [{amount: '', bidder: ''}]
     };
   }
 
@@ -70,11 +50,6 @@ class AuctionPage extends Component {
         {({ loading, error, data, refetch }) => {
           if (loading) return <Loader />;
           if (error) return `Error! ${error.message}`;
-          /* console.log('started: ' + data.auction.auctionStarted);
-          console.log('finished: ' + data.auction.auctionFinished); */
-          var finish = new Date(parseInt(data.auction.startTime));
-          finish.setSeconds(finish.getSeconds() + data.auction.duration);
-          /* console.log(finish.toISOString()); */
           return (
             <div>
               <div className='App'>
@@ -141,4 +116,4 @@ class AuctionPage extends Component {
   }
 }
 
-export default AuctionPage;
+export default MyAuctions;
