@@ -23,8 +23,10 @@ const GET_AUCTION = gql`
         description
         price
         highestBid {
+            id
           amount
           bidder {
+              id
             email
             name
           }
@@ -33,6 +35,8 @@ const GET_AUCTION = gql`
     }
   }
 `;
+
+
 
 class MyAuctions extends Component {
   constructor(props) {
