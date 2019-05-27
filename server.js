@@ -40,17 +40,22 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   playground: !IN_PROD,
-  context: async ({ req }) => {
-    // get the user token from the headers
-    const bearerToken = req.headers.authorization || '';
-    const token = bearerToken.replace('Bearer ', '');
+  context: async ({ req, connection }) => {
+    if (connection) {
+      console.log('Connection: ' + connection);
+      return connection.context;
+    } else {
+      // get the user token from the headers
+      const bearerToken = req.headers.authorization || '';
+      const token = bearerToken.replace('Bearer ', '');
 
-    try {
-      var decoded = await verify(token, utils.APP_SECRET);
-    } catch (err) {
-      return null;
+      try {
+        var decoded = await verify(token, utils.APP_SECRET);
+      } catch (err) {
+        return null;
+      }
+      return { decoded };
     }
-    return { decoded };
   }
 });
 

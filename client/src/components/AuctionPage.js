@@ -93,6 +93,7 @@ class AuctionPage extends Component {
                   subscription={BID_SUBSCRIPTION}
                   onSubscriptionData={() => {
                     refetch();
+                    console.log('Refetched');
                   }}
                 />
               </div>
