@@ -38,8 +38,20 @@ class AuctionList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: authenticationService.currentUserValue
+      user: null,
+      subscription: null
     };
+  }
+
+  componentDidMount() {
+    const subscription = authenticationService.currentUser.subscribe(x =>
+      this.setState({ user: x })
+    );
+    this.setState({ subscription });
+  }
+
+  componentWillUnmount() {
+    this.state.subscription.unsubscribe();
   }
 
   render() {

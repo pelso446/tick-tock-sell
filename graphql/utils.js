@@ -8,6 +8,7 @@ function getUserId(context) {
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '');
     const { userId } = verify(token, APP_SECRET);
+    console.log(userId);
     return userId;
   }
 

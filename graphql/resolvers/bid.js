@@ -1,5 +1,6 @@
-import { Item, User, Bid, Auction } from '../../models';
+import { Item, User, Bid } from '../../models';
 import { UserInputError, PubSub } from 'apollo-server-express';
+import { utils } from '../utils';
 const BID_ADDED = 'BID_ADDED';
 const pubsub = new PubSub();
 
@@ -22,9 +23,15 @@ export default {
     }
   },
   Mutation: {
-    putBid: async (root, args, { req }, info) => {
+    putBid: async (root, args, context, info) => {
       const validationErrors = {};
       const { itemID, bidderID, amount } = args;
+
+      //Controlls authentication for bidder
+      if (context.decoded.userId !== bidderID) {
+        validationErrors.badUser = 'This user is not validated';
+      }
+
       const item = await Item.findById(itemID, function(err, docs) {
         if (err) {
           validationErrors.itemError = err;

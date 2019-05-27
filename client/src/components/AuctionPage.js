@@ -62,10 +62,8 @@ class AuctionPage extends Component {
   }
 
   changeStyle(bidder, currentUser) {
-    console.log('innan' + bidder);
     if (bidder == null) {
     } else {
-      console.log('efter' + bidder);
       if (bidder.bidder.id === currentUser) {
         return {
           color: 'green'
@@ -160,7 +158,7 @@ class AuctionPage extends Component {
                                     <td
                                       style={this.changeStyle(
                                         item.highestBid,
-                                        user.user.id
+                                        user ? user.user.id : null
                                       )}
                                     >
                                       {item.highestBid
@@ -170,7 +168,7 @@ class AuctionPage extends Component {
                                     <td
                                       style={this.changeStyle(
                                         item.highestBid,
-                                        user.user.id
+                                        user ? user.user.id : null
                                       )}
                                     >
                                       {item.highestBid
@@ -182,7 +180,8 @@ class AuctionPage extends Component {
                                         color='success'
                                         disabled={
                                           data.auction.auctionFinished ||
-                                          !data.auction.auctionStarted
+                                          !data.auction.auctionStarted ||
+                                          !user
                                         }
                                         onClick={() =>
                                           PutBid({
@@ -204,7 +203,8 @@ class AuctionPage extends Component {
                                         color='primary'
                                         disabled={
                                           data.auction.auctionFinished ||
-                                          !data.auction.auctionStarted
+                                          !data.auction.auctionStarted ||
+                                          !user
                                         }
                                         onClick={() =>
                                           PutBid({
@@ -226,7 +226,8 @@ class AuctionPage extends Component {
                                         color='danger'
                                         disabled={
                                           data.auction.auctionFinished ||
-                                          !data.auction.auctionStarted
+                                          !data.auction.auctionStarted ||
+                                          !user
                                         }
                                         onClick={() =>
                                           PutBid({
