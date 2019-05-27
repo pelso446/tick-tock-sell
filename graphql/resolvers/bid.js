@@ -1,5 +1,6 @@
-import { Item, User, Bid, Auction } from '../../models';
+import { Item, User, Bid } from '../../models';
 import { UserInputError, PubSub } from 'apollo-server-express';
+import { utils } from '../utils';
 const BID_ADDED = 'BID_ADDED';
 const pubsub = new PubSub();
 
@@ -25,6 +26,12 @@ export default {
     putBid: async (root, args, { req }, info) => {
       const validationErrors = {};
       const { itemID, bidderID, amount } = args;
+      //console.log('Context from putBid: ' + JSON.stringify(context));
+      //console.log('Req from putBid: ' + req);
+
+      //const userId = utils.getUserId(context);
+      //console.log(userId);
+
       const item = await Item.findById(itemID, function(err, docs) {
         if (err) {
           validationErrors.itemError = err;

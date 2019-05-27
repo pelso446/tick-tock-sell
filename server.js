@@ -7,6 +7,7 @@ import resolvers from './graphql/resolvers';
 import { ApolloServer } from 'apollo-server-express';
 import { createServer } from 'http';
 import { utils } from './graphql/utils';
+import { verify } from 'jsonwebtoken';
 
 const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
@@ -38,7 +39,19 @@ mongoose
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  playground: !IN_PROD
+  playground: !IN_PROD,
+  context: async ({ req }) => {
+    // get the user token from the headers
+    const bearerToken = req.headers.authorization || '';
+    const token = bearerToken.replace('Bearer ', '');
+
+    try {
+      var decoded = await verify(token, utils.APP_SECRET);
+    } catch (err) {
+      return null;
+    }
+    return decoded.userId;
+  }
 });
 
 server.applyMiddleware({ app, cors: false });
