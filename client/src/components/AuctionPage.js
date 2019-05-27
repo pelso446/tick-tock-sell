@@ -25,6 +25,7 @@ const GET_AUCTION = gql`
         highestBid {
           amount
           bidder {
+            id
             name
           }
         }
@@ -57,8 +58,24 @@ class AuctionPage extends Component {
     super(props);
     this.state = {
       user: authenticationService.currentUserValue
-      // bids: [{amount: '', bidder: ''}]
     };
+  }
+
+  changeStyle(bidder, currentUser) {
+    console.log('innan' + bidder);
+    if (bidder == null) {
+    } else {
+      console.log('efter' + bidder);
+      if (bidder.bidder.id === currentUser) {
+        return {
+          color: 'green'
+        };
+      } else {
+        return {
+          color: 'red'
+        };
+      }
+    }
   }
 
   render() {
@@ -69,11 +86,8 @@ class AuctionPage extends Component {
         {({ loading, error, data, refetch }) => {
           if (loading) return <Loader />;
           if (error) return `Error! ${error.message}`;
-          /* console.log('started: ' + data.auction.auctionStarted);
-          console.log('finished: ' + data.auction.auctionFinished); */
           var finish = new Date(parseInt(data.auction.startTime));
           finish.setSeconds(finish.getSeconds() + data.auction.duration);
-          /* console.log(finish.toISOString()); */
           return (
             <div>
               <div>
@@ -82,26 +96,20 @@ class AuctionPage extends Component {
                   onSubscriptionData={() => {
                     refetch();
                   }}
-                >
-                  {({ data, loading }) => (
-                    <h4>
-                      New comment:{' '}
-                      {!loading && data.bidAdded
-                        ? data.bidAdded.amount
-                        : 'tomt'}
-                    </h4>
-                  )}
-                </Subscription>
+                />
               </div>
               <div className='App'>
                 <div className='container'>
                   <div className='panel panel-default'>
                     <Row className='panel-heading'>
-                      <Col>
+                      <Col xs='autos'>
                         <h3 className='panel-title'>{data.auction.title}</h3>
+                        <h5 className='panel-title'>
+                          {data.auction.description}
+                        </h5>
                       </Col>
-                      <Col>
-                        <h2 style={{ textAlign: 'end' }}>
+                      <Col xs='auto' style={{ marginLeft: 'auto' }}>
+                        <h2>
                           {!data.auction.auctionStarted ? (
                             <div>
                               Tid kvar till auktion:
@@ -149,12 +157,22 @@ class AuctionPage extends Component {
                                     <td>{item.title}</td>
                                     <td>{item.description}</td>
                                     <td>{item.price}</td>
-                                    <td>
+                                    <td
+                                      style={this.changeStyle(
+                                        item.highestBid,
+                                        user.user.id
+                                      )}
+                                    >
                                       {item.highestBid
                                         ? item.highestBid.amount
                                         : 'Inget bud har lagts'}
                                     </td>
-                                    <td>
+                                    <td
+                                      style={this.changeStyle(
+                                        item.highestBid,
+                                        user.user.id
+                                      )}
+                                    >
                                       {item.highestBid
                                         ? item.highestBid.bidder.name
                                         : 'Inget bud har lagts'}

@@ -9,6 +9,7 @@ const GET_AUCTIONS = gql`
   {
     auctions {
       id
+      auctionFinished
       title
       description
       startTime
@@ -50,32 +51,31 @@ class AuctionList extends Component {
           if (error) return `Error! ${error.message}`;
 
           return (
-            <div className='App'>
-              <div className='container'>
-                <div className='panel panel-default'>
-                  <div className='panel-heading'>
-                    <h3 className='panel-title'>Kommande Auktioner</h3>
-
-                    {user ? (
-                      <h4>
-                        <Link to={'/auctionform/'}>Lägg till auktion</Link>
-                      </h4>
-                    ) : (
-                      <p>Logga in för att skapa en auktion</p>
-                    )}
-                  </div>
-                  <div className='panel-body'>
-                    <table className='table table-stripe'>
-                      <thead>
-                        <tr>
-                          <th>Titel</th>
-                          <th>Beskrivning</th>
-                          <th>Starttid</th>
-                          <th>Säljare</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {data.auctions.map((auction, index) => (
+            <div className='App' style={{ margin: '0 5em' }}>
+              <div className='panel-heading'>
+                <h3 className='panel-title'>Kommande Auktioner</h3>
+                {user ? (
+                  <h4>
+                    <Link to={'/auctionform/'}>Lägg till auktion</Link>
+                  </h4>
+                ) : (
+                  <p>Logga in för att skapa en auktion</p>
+                )}
+              </div>
+              <div className='panel-body'>
+                <table className='table table-stripe'>
+                  <thead>
+                    <tr>
+                      <th>Titel</th>
+                      <th>Beskrivning</th>
+                      <th>Starttid</th>
+                      <th>Säljare</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.auctions.map((auction, index) => {
+                      if (auction.auctionFinished === false) {
+                        return (
                           <tr key={index}>
                             <td>
                               <Link to={`/show/${auction.id}`}>
@@ -88,11 +88,12 @@ class AuctionList extends Component {
                             </td>
                             <td>{auction.seller.name}</td>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+                        );
+                      }
+                      return null;
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           );

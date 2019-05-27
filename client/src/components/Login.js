@@ -98,16 +98,10 @@ class Login extends Component {
   }
 
   _confirm = async data => {
-    const userToken = data.signIn; /* 
-
-    this._saveUserData(userToken); */
+    const userToken = data.signIn;
     authenticationService.login(userToken);
     this.props.history.push(`/`);
   };
-
-  /*   _saveUserData = userToken => {
-    localStorage.setItem(AUTH_TOKEN, JSON.stringify(userToken));
-  }; */
 }
 
 export default Login;

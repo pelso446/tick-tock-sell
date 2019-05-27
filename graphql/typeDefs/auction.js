@@ -37,6 +37,5 @@ export default gql`
     itemTitle: String!
     itemDescription: String
     itemPrice: Int
-    itemDuration: Int
   }
 `;

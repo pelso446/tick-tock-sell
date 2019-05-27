@@ -46,8 +46,7 @@ export default {
             auction: auction._id,
             title: item.itemTitle,
             description: item.itemDescription,
-            price: item.itemPrice,
-            duration: item.itemDuration
+            price: item.itemPrice
           });
         });
       }
@@ -107,7 +106,7 @@ export default {
     deleteAuction: async (root, args, { req }, info) => {
       const validationErrors = {};
       const { auctionID } = args;
-      Auction.findByIdAndRemove(auctionID, function(err, res) {
+      await Auction.findByIdAndRemove(auctionID, function(err, res) {
         if (err) {
           validationErrors.removeError = 'err';
           throw new AuthenticationError(

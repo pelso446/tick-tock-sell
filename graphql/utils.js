@@ -16,12 +16,8 @@ function getUserId(context) {
 
 async function scheduleAllAuctions() {
   const auctions = await Auction.find({ auctionFinished: false });
-  //console.log(auctions);
   auctions.forEach(async function(auction) {
-    //console.log('Auction Time ' + auction.startTime);
     const time = new Date();
-    /* console.log('Time now ' + time);
-    console.log(auction.startTime > time); */
     if (auction.startTime < time && !auction.auctionStarted) {
       console.log(
         'Auction ' + auction.title + ' Was reactively set as started'
@@ -47,10 +43,6 @@ async function scheduleAllAuctions() {
 }
 
 function scheduleJob(auction) {
-  /* console.log(auction.startTime + ' ' + typeof auction.startTime);
-  console.log(new Date(auction.startTime));
-  console.log(Date.now()); */
-
   const now = new Date();
   var start = new Date(auction.startTime);
   var finish = new Date(auction.startTime);
