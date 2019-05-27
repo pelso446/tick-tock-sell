@@ -58,7 +58,6 @@ class AuctionPage extends Component {
     super(props);
     this.state = {
       user: authenticationService.currentUserValue
-      // bids: [{amount: '', bidder: ''}]
     };
   }
 
@@ -87,24 +86,30 @@ class AuctionPage extends Component {
         {({ loading, error, data, refetch }) => {
           if (loading) return <Loader />;
           if (error) return `Error! ${error.message}`;
-          /* console.log('started: ' + data.auction.auctionStarted);
-          console.log('finished: ' + data.auction.auctionFinished); */
           var finish = new Date(parseInt(data.auction.startTime));
           finish.setSeconds(finish.getSeconds() + data.auction.duration);
-          /* console.log(finish.toISOString()); */
           return (
             <div>
+              <div>
+                <Subscription
+                  subscription={BID_SUBSCRIPTION}
+                  onSubscriptionData={() => {
+                    refetch();
+                  }}
+                />
+              </div>
               <div className='App'>
                 <div className='container'>
                   <div className='panel panel-default'>
                     <Row className='panel-heading'>
-                      <Col>
+                      <Col xs='autos'>
                         <h3 className='panel-title'>{data.auction.title}</h3>
-                        <h5 className='panel-title'>{data.auction.description}</h5>
-
+                        <h5 className='panel-title'>
+                          {data.auction.description}
+                        </h5>
                       </Col>
-                      <Col>
-                        <h2 style={{ textAlign: 'end' }}>
+                      <Col xs='auto' style={{ marginLeft: 'auto' }}>
+                        <h2>
                           {!data.auction.auctionStarted ? (
                             <div>
                               Tid kvar till auktion:

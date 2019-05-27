@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import '../App.css';
 import gql from 'graphql-tag';
-import { Query, Mutation, Subscription } from 'react-apollo';
-import { Button, Row, Col } from 'reactstrap';
+import { Query } from 'react-apollo';
+import { Row, Col } from 'reactstrap';
 import { authenticationService } from '../services/authentication.service';
-import Countdown from './Countdown';
 import Loader from './Loader';
 
 const GET_AUCTION = gql`
@@ -23,10 +22,10 @@ const GET_AUCTION = gql`
         description
         price
         highestBid {
-            id
+          id
           amount
           bidder {
-              id
+            id
             email
             name
           }
@@ -35,8 +34,6 @@ const GET_AUCTION = gql`
     }
   }
 `;
-
-
 
 class MyAuctions extends Component {
   constructor(props) {
@@ -47,7 +44,6 @@ class MyAuctions extends Component {
   }
 
   render() {
-    const { user } = this.state;
     const auctionID = this.props.match.params.id;
     return (
       <Query query={GET_AUCTION} variables={{ id: auctionID }}>

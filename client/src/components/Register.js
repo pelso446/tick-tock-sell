@@ -103,16 +103,9 @@ class Register extends Component {
 
   _confirm = async data => {
     const userToken = data.signIn;
-
-    /*     this._saveUserData(userToken); */
-
     authenticationService.login(userToken);
     this.props.history.push(`/`);
   };
-  /* 
-  _saveUserData = userToken => {
-    localStorage.setItem(AUTH_TOKEN, userToken);
-  }; */
 }
 
 export default Register;
