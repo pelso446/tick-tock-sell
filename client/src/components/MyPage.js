@@ -101,9 +101,9 @@ class MyPage extends Component {
                                         <th>Titel</th>
                                         <th>Beskrivning</th>
                                         <th>Starttid</th>
+                                        <th />
                                       </tr>
                                     </thead>
-
                                     {{ auctions }.auctions.map(
                                       (auction, index) => (
                                         <tbody>
@@ -116,18 +116,20 @@ class MyPage extends Component {
                                                   timestamp={auction.startTime}
                                                 />
                                               </td>
-                                              <Button
-                                                color='danger'
-                                                onClick={() =>
-                                                  deleteAuction({
-                                                    variables: {
-                                                      auctionID: auction.id
-                                                    }
-                                                  }).then(() => refetch())
-                                                }
-                                              >
-                                                Ta bort auktion
-                                              </Button>
+                                              <td>
+                                                <Button
+                                                  color='danger'
+                                                  onClick={() =>
+                                                    deleteAuction({
+                                                      variables: {
+                                                        auctionID: auction.id
+                                                      }
+                                                    }).then(() => refetch())
+                                                  }
+                                                >
+                                                  Ta bort auktion
+                                                </Button>
+                                              </td>
                                             </tr>
                                           ) : auction.auctionFinished ? (
                                             <tr key={auction.id}>
@@ -138,7 +140,7 @@ class MyPage extends Component {
                                                   timestamp={auction.startTime}
                                                 />
                                               </td>
-                                              <div>
+                                              <td>
                                                 <Link
                                                   to={`/myauctions/${
                                                     auction.id
@@ -148,7 +150,7 @@ class MyPage extends Component {
                                                     Visa avslutad auktion
                                                   </Button>
                                                 </Link>
-                                              </div>
+                                              </td>
                                             </tr>
                                           ) : (
                                             ''
@@ -180,13 +182,12 @@ class MyPage extends Component {
                                       <th>Slutpris</th>
                                     </tr>
                                   </thead>
-
                                   {data.items.map((item, index) => {
-                                    if (item.highestBid != null)
+                                    if (item.highestBid != null) {
                                       if (
-                                        item.highestBid.bidder.id ==
+                                        item.highestBid.bidder.id ===
                                         user.user.id
-                                      )
+                                      ) {
                                         return (
                                           <tbody>
                                             <tr key={item.id}>
@@ -197,6 +198,9 @@ class MyPage extends Component {
                                             </tr>
                                           </tbody>
                                         );
+                                      }
+                                    }
+                                    return null;
                                   })}
                                 </table>
                                 <div> </div>

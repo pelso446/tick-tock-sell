@@ -39,17 +39,6 @@ const httpLink = createHttpLink({
   fetch
 });
 
-const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
-//process.env.PORT = 5000;
-// Create a WebSocket link:
-//"ws://localhost:5000"
-/* 
-process.env.NODE_ENV === 'production'
-? `ws://localhost:${process.env.PORT}/graphql`
-:  */
-//var host = location.origin.replace(/^http/, 'ws');
-console.log('location: ' + window.location.host);
-
 const wsLink = new WebSocketLink({
   uri: wsUrl,
   options: {
@@ -57,8 +46,8 @@ const wsLink = new WebSocketLink({
   }
 });
 
+const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
 const authLink = setContext((_, { headers }) => {
-  //const userToken = JSON.parse(localStorage.getItem(AUTH_TOKEN));
   return {
     headers: {
       ...headers,

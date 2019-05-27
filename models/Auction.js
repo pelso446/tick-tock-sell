@@ -29,7 +29,7 @@ const AuctionSchema = new Schema(
     duration: {
       type: Number,
       required: true,
-      default: 30
+      default: 180
     },
     auctionStarted: {
       type: Boolean,

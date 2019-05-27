@@ -1,23 +1,12 @@
 import express from 'express';
-//import graphqlHTTP from'express-graphql';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import config from 'config';
-//import schema from './graphql/schemas';
 import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
-//import expressGraphQL from 'express-graphql';
-import { ApolloServer, PubSub } from 'apollo-server-express';
-import { execute, subscribe } from 'graphql';
+import { ApolloServer } from 'apollo-server-express';
 import { createServer } from 'http';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { utils } from './graphql/utils';
-
-//Remove
-/* 
-process.env.NODE_ENV = 'production';
-process.env.mongoURI = config.get('mongoURI'); */
 
 const IN_PROD = process.env.NODE_ENV === 'production';
 const app = express();
