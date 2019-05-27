@@ -27,9 +27,7 @@ export default {
     }
   },
   Item: {
-    //Use populate
     auction: async (item, args, context, info) => {
-      //console.log(JSON.stringify(item));
       return await Auction.findById(item.auction);
     },
     bids: async (item, args, context, info) => {
