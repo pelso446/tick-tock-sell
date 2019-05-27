@@ -50,7 +50,7 @@ const server = new ApolloServer({
     } catch (err) {
       return null;
     }
-    return decoded.userId;
+    return { decoded };
   }
 });
 

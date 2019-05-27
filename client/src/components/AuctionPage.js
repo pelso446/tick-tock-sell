@@ -148,8 +148,6 @@ class AuctionPage extends Component {
                         </thead>
                         <tbody>
                           {data.auction.items.map((item, index) => {
-                            console.log(user);
-
                             return (
                               <Mutation mutation={PUT_BID} key={item.id}>
                                 {(PutBid, { loading, error }) => (
