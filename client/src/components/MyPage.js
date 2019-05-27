@@ -12,17 +12,26 @@ const GET_AUCTION = gql`
   query getAuctions($sellerID: ID!) {
     auctions(sellerID: $sellerID) {
       id
-      auctionFinished
-      seller {
-        id
-      }
       title
       description
       startTime
-      items {
-        title
-        description
-        price
+      auctionFinished
+    }
+  }
+`;
+
+const GET_ITEMS = gql`
+  query {
+    items {
+      id
+      price
+      description
+      title
+      highestBid {
+        amount
+        bidder {
+          id
+        }
       }
     }
   }
@@ -62,87 +71,145 @@ class MyPage extends Component {
     const { user } = this.state;
     const sellerID = user.user.id;
     return (
-      <Query query={GET_AUCTION} variables={{ sellerID: sellerID }}>
-        {({ loading, error, data, refetch }) => {
+      <Query query={GET_ITEMS}>
+        {({ loading, error, data }) => {
           if (loading) return <Loader />;
           if (error) return `Error! ${error.message}`;
-
           return (
-            <Mutation mutation={DELETE_AUCTION}>
-              {(deleteAuction, { loading, error }) => (
-                <Form>
-                  <div className='App'>
-                    <div className='container'>
-                      <div className='panel panel-default'>
-                        <div className='panel-heading'>
-                          <h3 className='panel-title'>Mina Auktioner</h3>
-                        </div>
-                        <div className='panel-body'>
-                          <table className='table table-stripe'>
-                            <thead>
-                              <tr>
-                                <th>Titel</th>
-                                <th>Beskrivning</th>
-                                <th>Starttid</th>
-                                <th />
-                                <th />
-                                <th />
-                              </tr>
-                            </thead>
+            <Query query={GET_AUCTION} variables={{ sellerID: sellerID }}>
+              {({ loading, error, data: { auctions }, refetch }) => {
+                if (loading) return <Loader />;
+                if (error) return `Error! ${error.message}`;
 
-                            {data.auctions.map((auction, index) => (
-                              <tbody>
-                                {!auction.auctionFinished ? (
-                                  <tr>
-                                    <td>{auction.title}</td>
-                                    <td>{auction.description}</td>
-                                    <td>
-                                      <Time timestamp={auction.startTime} />
-                                    </td>
-                                    <td>{auction.seller.name}</td>
-                                    <td>
-                                      <Button
-                                        color='danger'
-                                        onClick={() =>
-                                          deleteAuction({
-                                            variables: {
-                                              auctionID: auction.id
-                                            }
-                                          }).then(() => refetch())
-                                        }
-                                      >
-                                        Ta bort auktion
-                                      </Button>
-                                    </td>
-                                  </tr>
-                                ) : auction.auctionFinished ? (
-                                  <tr>
-                                    <td>{auction.title}</td>
-                                    <td>{auction.description}</td>
-                                    <td>
-                                      <Time timestamp={auction.startTime} />
-                                    </td>
-                                    <td>{auction.seller.name}</td>
-                                    <td>
-                                        <Link to={`/myauctions/${auction.id}`}>
-                                      <Button color='info'>Visa avslutad auktion</Button>
-                                      </Link>
-                                    </td>
-                                  </tr>
-                                ) : (
-                                  ''
-                                )}
-                              </tbody>
-                            ))}
-                          </table>
-                          <div> </div>
+                return (
+                  <Mutation mutation={DELETE_AUCTION}>
+                    {(deleteAuction, { loading, error }) => (
+                      <div>
+                        <Form>
+                          <div className='App'>
+                            <div className='container'>
+                              <div className='panel panel-default'>
+                                <div className='panel-heading'>
+                                  <h3 className='panel-title'>
+                                    Mina Auktioner
+                                  </h3>
+                                </div>
+                                <div className='panel-body'>
+                                  <table className='table table-stripe'>
+                                    <thead>
+                                      <tr>
+                                        <th>Titel</th>
+                                        <th>Beskrivning</th>
+                                        <th>Starttid</th>
+                                      </tr>
+                                    </thead>
+
+                                    {{ auctions }.auctions.map(
+                                      (auction, index) => (
+                                        <tbody>
+                                          {!auction.auctionFinished ? (
+                                            <tr key={auction.id}>
+                                              <td>{auction.title}</td>
+                                              <td>{auction.description}</td>
+                                              <td>
+                                                <Time
+                                                  timestamp={auction.startTime}
+                                                />
+                                              </td>
+                                              <Button
+                                                color='danger'
+                                                onClick={() =>
+                                                  deleteAuction({
+                                                    variables: {
+                                                      auctionID: auction.id
+                                                    }
+                                                  }).then(() => refetch())
+                                                }
+                                              >
+                                                Ta bort auktion
+                                              </Button>
+                                            </tr>
+                                          ) : auction.auctionFinished ? (
+                                            <tr key={auction.id}>
+                                              <td>{auction.title}</td>
+                                              <td>{auction.description}</td>
+                                              <td>
+                                                <Time
+                                                  timestamp={auction.startTime}
+                                                />
+                                              </td>
+                                              <div>
+                                                <Link
+                                                  to={`/myauctions/${
+                                                    auction.id
+                                                  }`}
+                                                >
+                                                  <Button color='info'>
+                                                    Visa avslutad auktion
+                                                  </Button>
+                                                </Link>
+                                              </div>
+                                            </tr>
+                                          ) : (
+                                            ''
+                                          )}
+                                        </tbody>
+                                      )
+                                    )}
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Form>
+                        <div className='App'>
+                          <div className='container'>
+                            <div className='panel panel-default'>
+                              <div className='panel-heading'>
+                                <h3 className='panel-title'>
+                                  Mina vunna budgivningar
+                                </h3>
+                              </div>
+                              <div className='panel-body'>
+                                <table className='table table-stripe'>
+                                  <thead>
+                                    <tr>
+                                      <th>Titel</th>
+                                      <th>Beskrivning</th>
+                                      <th>Ursprungspris</th>
+                                      <th>Slutpris</th>
+                                    </tr>
+                                  </thead>
+
+                                  {data.items.map((item, index) => {
+                                    if (item.highestBid != null)
+                                      if (
+                                        item.highestBid.bidder.id ==
+                                        user.user.id
+                                      )
+                                        return (
+                                          <tbody>
+                                            <tr key={item.id}>
+                                              <td>{item.title}</td>
+                                              <td>{item.description}</td>
+                                              <td>{item.price}</td>
+                                              <td>{item.highestBid.amount}</td>
+                                            </tr>
+                                          </tbody>
+                                        );
+                                  })}
+                                </table>
+                                <div> </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </Form>
-              )}
-            </Mutation>
+                    )}
+                  </Mutation>
+                );
+              }}
+            </Query>
           );
         }}
       </Query>

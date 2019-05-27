@@ -9,6 +9,7 @@ const GET_AUCTIONS = gql`
   {
     auctions {
       id
+      auctionFinished
       title
       description
       startTime
@@ -75,20 +76,23 @@ class AuctionList extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {data.auctions.map((auction, index) => (
-                          <tr key={index}>
-                            <td>
-                              <Link to={`/show/${auction.id}`}>
-                                {auction.title}
-                              </Link>
-                            </td>
-                            <td>{auction.description}</td>
-                            <td>
-                              <Time timestamp={auction.startTime} />
-                            </td>
-                            <td>{auction.seller.name}</td>
-                          </tr>
-                        ))}
+                        {data.auctions.map((auction, index) => {
+                          if (auction.auctionFinished == false)
+                            return (
+                              <tr key={index}>
+                                <td>
+                                  <Link to={`/show/${auction.id}`}>
+                                    {auction.title}
+                                  </Link>
+                                </td>
+                                <td>{auction.description}</td>
+                                <td>
+                                  <Time timestamp={auction.startTime} />
+                                </td>
+                                <td>{auction.seller.name}</td>
+                              </tr>
+                            );
+                        })}
                       </tbody>
                     </table>
                   </div>

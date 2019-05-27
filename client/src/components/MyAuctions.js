@@ -23,8 +23,10 @@ const GET_AUCTION = gql`
         description
         price
         highestBid {
+            id
           amount
           bidder {
+              id
             email
             name
           }
@@ -33,6 +35,8 @@ const GET_AUCTION = gql`
     }
   }
 `;
+
+
 
 class MyAuctions extends Component {
   constructor(props) {
@@ -67,11 +71,9 @@ class MyAuctions extends Component {
                             <th>Titel</th>
                             <th>Beskrivning</th>
                             <th>Utgångspris</th>
+                            <th>Slutpris</th>
                             <th>Köpare</th>
                             <th>Kontakta köparen via mail</th>
-                            <th />
-                            <th />
-                            <th />
                           </tr>
                         </thead>
                         <tbody>
@@ -80,6 +82,7 @@ class MyAuctions extends Component {
                               <tr key={index}>
                                 <td>{item.title}</td>
                                 <td>{item.description}</td>
+                                <td>{item.price}</td>
                                 <td>
                                   {item.highestBid
                                     ? item.highestBid.amount
@@ -95,7 +98,6 @@ class MyAuctions extends Component {
                                     ? item.highestBid.bidder.email
                                     : 'Inget har lagts på detta föremål'}
                                 </td>
-
                                 <div />
                               </tr>
                             );
