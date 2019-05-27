@@ -42,7 +42,6 @@ const server = new ApolloServer({
   playground: !IN_PROD,
   context: async ({ req, connection }) => {
     if (connection) {
-      console.log('Connection: ' + connection);
       return connection.context;
     } else {
       // get the user token from the headers
