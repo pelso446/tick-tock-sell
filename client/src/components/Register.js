@@ -102,7 +102,7 @@ class Register extends Component {
   }
 
   _confirm = async data => {
-    const userToken = data.signIn;
+    const userToken = data.signUp;
     authenticationService.login(userToken);
     this.props.history.push(`/`);
   };
