@@ -2,7 +2,7 @@
 <i>by Erik Ståhl & Pelle Söderberg</i>
 
 <h2>About</h2>
-TickTockSell is an auction web app designed to help students easily sell stuff at competitive prices. It also makes selling and buying stuff fun! TickTockSell is developed in part with the project for the course TDDD27 Advanced Web Programming at Linköping University. A presentation of the website and the code can be found on [youtube](https://youtu.be/SqttIGi1IC0).
+TickTockSell is an auction web app designed to help students easily sell stuff at competitive prices. It also makes selling and buying stuff fun! TickTockSell is developed in part with the project for the course TDDD27 Advanced Web Programming at Linköping University. A presentation of the website and the code can be found on [youtube](https://youtu.be/SqttIGi1IC0). You can visit the app [here](https://glacial-hollows-33996.herokuapp.com/).
 
 <h2>Develop locally</h2>
 
